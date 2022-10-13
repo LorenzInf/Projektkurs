@@ -42,11 +42,11 @@ public class MainMenu : MonoBehaviour {
 
     public void ReadInput (string s) {
         Debug.Log("[DEBUG] The input was: \"" + s + "\"");
-        if (s == "Quit" || s == "quit") {
+        if (s.ToLower() == "quit") {
             QuitGame();
-        } else if (s == "Options" || s == "options") {
+        } else if (s.ToLower() == "options") {
             ShowOptions();
-        } else if (s == "Play" || s == "play") {
+        } else if (s.ToLower() == "play") {
             PlayGame();
         }
     }
