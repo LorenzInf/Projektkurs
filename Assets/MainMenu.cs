@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour {
     private GameObject musicIcon;
     private GameObject musicIconOff;
 
+    public AudioSource audioSource;
 
     void Start() {
         mainMenu = GameObject.Find("MainMenu");
@@ -28,6 +29,10 @@ public class MainMenu : MonoBehaviour {
 
     public void PlayGame () {
         //SceneManager.LoadScene("Level");
+    }
+
+    public void PlayClick () {
+        audioSource.Play();
     }
 
     public void ShowOptions () {
