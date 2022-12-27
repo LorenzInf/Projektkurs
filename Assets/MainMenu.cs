@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class MainMenu : MonoBehaviour {
 
@@ -11,6 +12,9 @@ public class MainMenu : MonoBehaviour {
     private GameObject soundIconOff;
     private GameObject musicIcon;
     private GameObject musicIconOff;
+
+    private bool soundOn = true; //make settings file, read from there
+    private bool musicOn = true; //same thing
 
     public AudioSource audioSource;
 
@@ -28,11 +32,12 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void PlayGame () {
-        //SceneManager.LoadScene("Level");
+        SceneManager.LoadScene("Hub");
     }
 
     public void PlayClick () {
-        audioSource.Play();
+        if(soundOn)
+            audioSource.Play();
     }
 
     public void ShowOptions () {
@@ -59,12 +64,14 @@ public class MainMenu : MonoBehaviour {
     public void ToggleSound () {
         soundIcon.SetActive(!soundIcon.activeSelf);
         soundIconOff.SetActive(!soundIconOff.activeSelf);
+        soundOn = !soundOn;
         //...
     }
 
     public void ToggleMusic () {
         musicIcon.SetActive(!musicIcon.activeSelf);
         musicIconOff.SetActive(!musicIconOff.activeSelf);
+        musicOn = !musicOn;
         //...
     }
 }
