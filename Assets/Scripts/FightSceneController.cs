@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FightSceneController : MonoBehaviour
 {
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -12,6 +14,16 @@ public class FightSceneController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        
+    }
+
+    public void SetUpFight()
+    {
+        
+    }
+
+    public void ReadInput(string s)
     {
         
     }
