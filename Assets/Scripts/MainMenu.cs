@@ -13,8 +13,7 @@ public class MainMenu : MonoBehaviour {
     private GameObject musicIcon;
     private GameObject musicIconOff;
 
-    private bool soundOn = true; //make settings file, read from there
-    private bool musicOn = true; //same thing
+    public Config config;
 
     public AudioSource audioSource;
 
@@ -25,7 +24,7 @@ public class MainMenu : MonoBehaviour {
         soundIconOff = GameObject.Find("SoundButton/sound_icon_off");
         musicIcon = GameObject.Find("MusicButton/music_icon");
         musicIconOff = GameObject.Find("MusicButton/music_icon_off");
-
+        
         optionsMenu.SetActive(false);
         soundIconOff.SetActive(false);
         musicIconOff.SetActive(false);
@@ -36,7 +35,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void PlayClick () {
-        if(soundOn)
+        if(config.GetSoundOn())
             audioSource.Play();
     }
 
@@ -64,14 +63,14 @@ public class MainMenu : MonoBehaviour {
     public void ToggleSound () {
         soundIcon.SetActive(!soundIcon.activeSelf);
         soundIconOff.SetActive(!soundIconOff.activeSelf);
-        soundOn = !soundOn;
+        config.SetSound(!config.GetSoundOn());
         //...
     }
 
     public void ToggleMusic () {
         musicIcon.SetActive(!musicIcon.activeSelf);
         musicIconOff.SetActive(!musicIconOff.activeSelf);
-        musicOn = !musicOn;
+        config.SetMusic(!config.GetMusicOn());
         //...
     }
 }
