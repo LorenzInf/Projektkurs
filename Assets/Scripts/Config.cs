@@ -2,29 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Config : MonoBehaviour
-{
+public class Config : MonoBehaviour{
     
     private static bool soundOn = true;
     private static bool musicOn = true;
 
-    public bool GetSoundOn()
-    {
+    public bool GetSoundOn(){
         return soundOn;
     }
 
-    public bool GetMusicOn()
-    {
+    public bool GetMusicOn(){
         return musicOn;
     }
 
-    public void SetSound(bool sound)
-    {
+    public void SetSound(bool sound){
         soundOn = sound;
     }
 
-    public void SetMusic(bool music)
-    {
+    public void SetMusic(bool music){
         musicOn = music;
     }
 }

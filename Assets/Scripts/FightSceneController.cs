@@ -2,29 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightSceneController : MonoBehaviour
-{
+public class FightSceneController : MonoBehaviour{
     
-    
-    // Start is called before the first frame update
-    void Start()
-    {
+    public void SetUpFight(){
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetUpFight()
-    {
-        
-    }
-
-    public void ReadInput(string s)
-    {
+    public void ReadInput(string s){
         
     }
 }
