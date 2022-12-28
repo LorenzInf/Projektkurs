@@ -64,13 +64,11 @@ public class MainMenu : MonoBehaviour {
         soundIcon.SetActive(!soundIcon.activeSelf);
         soundIconOff.SetActive(!soundIconOff.activeSelf);
         config.SetSound(!config.GetSoundOn());
-        //...
     }
 
     public void ToggleMusic () {
         musicIcon.SetActive(!musicIcon.activeSelf);
         musicIconOff.SetActive(!musicIconOff.activeSelf);
         config.SetMusic(!config.GetMusicOn());
-        //...
     }
 }
