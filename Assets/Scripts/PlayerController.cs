@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour{
     public static double health;
     private static ArrayList items = new ArrayList();
     private static ItemController inHand;
