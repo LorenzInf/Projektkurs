@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour{
     
-    private static float speed=1;
-    private static ArrayList items;
-    private static ItemController inHand;
+    private static ArrayList _items;
+    private static ItemController _inHand;
+    private static double _health;
     
-    public static double health;
     public GameObject player;
 
     public void Start(){
-        items = new ArrayList();
+        _items = new ArrayList();
+        
     }
 
     public void Update(){
@@ -22,28 +22,27 @@ public class PlayerController : MonoBehaviour{
 
     public void HandleMovement(){
         float x=0f, y=0f;
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
             y++;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
             x--;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
             y--;
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
             x++;
-        Debug.Log(x+" "+y);
-        player.transform.position += new Vector3(x,y,0f) * speed * Time.deltaTime;
+        player.transform.position += new Vector3(x,y,0f);
     }
 
     public void TakeDamage(int amount) {
-        health -= amount;
+        _health -= amount;
     }
 
     public void AddItem(ItemController i){
-        items.Add(i);
+        _items.Add(i);
     }
 
     public void SelectItem(string name){
-        foreach (var item in items){
+        foreach (var item in _items){
             
         }
     }
