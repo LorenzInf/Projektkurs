@@ -287,6 +287,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1339926084}
+  wall: {fileID: 0}
+  floor: {fileID: 0}
 --- !u!1 &670582325
 GameObject:
   m_ObjectHideFlags: 0
