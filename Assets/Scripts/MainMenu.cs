@@ -6,28 +6,28 @@ using System.IO;
 
 public class MainMenu : MonoBehaviour {
 
-    private GameObject mainMenu;
-    private GameObject optionsMenu;
-    private GameObject soundIcon;
-    private GameObject soundIconOff;
-    private GameObject musicIcon;
-    private GameObject musicIconOff;
+    private GameObject _mainMenu;
+    private GameObject _optionsMenu;
+    private GameObject _soundIcon;
+    private GameObject _soundIconOff;
+    private GameObject _musicIcon;
+    private GameObject _musicIconOff;
 
     public Config config;
 
     public AudioSource audioSource;
 
     void Start() {
-        mainMenu = GameObject.Find("MainMenu");
-        optionsMenu = GameObject.Find("OptionsMenu");
-        soundIcon = GameObject.Find("SoundButton/sound_icon");
-        soundIconOff = GameObject.Find("SoundButton/sound_icon_off");
-        musicIcon = GameObject.Find("MusicButton/music_icon");
-        musicIconOff = GameObject.Find("MusicButton/music_icon_off");
+        _mainMenu = GameObject.Find("MainMenu");
+        _optionsMenu = GameObject.Find("OptionsMenu");
+        _soundIcon = GameObject.Find("SoundButton/sound_icon");
+        _soundIconOff = GameObject.Find("SoundButton/sound_icon_off");
+        _musicIcon = GameObject.Find("MusicButton/music_icon");
+        _musicIconOff = GameObject.Find("MusicButton/music_icon_off");
         
-        optionsMenu.SetActive(false);
-        soundIconOff.SetActive(false);
-        musicIconOff.SetActive(false);
+        _optionsMenu.SetActive(false);
+        _soundIconOff.SetActive(false);
+        _musicIconOff.SetActive(false);
     }
 
     public void PlayGame () {
@@ -40,8 +40,8 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void ShowOptions () {
-        mainMenu.SetActive(false);
-        optionsMenu.SetActive(true);
+        _mainMenu.SetActive(false);
+        _optionsMenu.SetActive(true);
     }
 
     public void QuitGame () {
@@ -61,14 +61,14 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void ToggleSound () {
-        soundIcon.SetActive(!soundIcon.activeSelf);
-        soundIconOff.SetActive(!soundIconOff.activeSelf);
+        _soundIcon.SetActive(!_soundIcon.activeSelf);
+        _soundIconOff.SetActive(!_soundIconOff.activeSelf);
         config.SetSound(!config.GetSoundOn());
     }
 
     public void ToggleMusic () {
-        musicIcon.SetActive(!musicIcon.activeSelf);
-        musicIconOff.SetActive(!musicIconOff.activeSelf);
+        _musicIcon.SetActive(!_musicIcon.activeSelf);
+        _musicIconOff.SetActive(!_musicIconOff.activeSelf);
         config.SetMusic(!config.GetMusicOn());
     }
 }

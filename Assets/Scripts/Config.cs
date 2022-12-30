@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class Config : MonoBehaviour{
     
-    private static bool soundOn = true;
-    private static bool musicOn = true;
+    private static bool _soundOn = true;
+    private static bool _musicOn = true;
 
     public bool GetSoundOn(){
-        return soundOn;
+        return _soundOn;
     }
 
     public bool GetMusicOn(){
-        return musicOn;
+        return _musicOn;
     }
 
     public void SetSound(bool sound){
-        soundOn = sound;
+        _soundOn = sound;
     }
 
     public void SetMusic(bool music){
-        musicOn = music;
+        _musicOn = music;
     }
 }
