@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System;
 
 public class MapGen {
      public static Room?[,] Gen(int width, int height, int amountOfRooms) {
-            var random = new Random();
+            var random = new System.Random();
             var map = new Room?[width, height];
             
             var coords = new Coord(random.Next(0, width), random.Next(0, height));
@@ -15,9 +16,8 @@ public class MapGen {
             return map;
      }
 
-     private static void FillRec(Room?[,] map, Coord coord, int amountOfRooms, Random random) {
-         var paths = FreeAround(map, coord); if (paths.Count < 1 || amountOfRooms < 1) { 
-             Console.WriteLine($"amount left: {amountOfRooms}, paths: {paths.Count}");
+     private static void FillRec(Room?[,] map, Coord coord, int amountOfRooms, System.Random random) {
+         var paths = FreeAround(map, coord); if (paths.Count < 1 || amountOfRooms < 1) {
              return;
          }
             
@@ -25,7 +25,6 @@ public class MapGen {
          //var amount = paths.Count;
          var nDistribution = Distribute(amountOfRooms, amount, random);
          
-         //Console.WriteLine(amount);
          
          for (var i = 0; i < nDistribution.Count; i++) { 
              var pCoord = paths[i];
@@ -42,7 +41,7 @@ public class MapGen {
          return RoomType.Boss;
      }
 
-    private static List<int> Distribute(int total, int amount, Random random) { 
+    private static List<int> Distribute(int total, int amount, System.Random random) { 
         var distribution = new List<double>(); 
         double sum = 0; 
         for (var i = 0; i < amount; i++) { 
@@ -74,26 +73,20 @@ public class MapGen {
                0 <= coord.Y && coord.Y < arr.GetLength(1);
     }
     
-    private enum Dir { 
+    public enum Dir { 
         Left, 
         Right, 
         Up, 
         Down
     }
         
-    private enum RoomType {
+    public enum RoomType {
         Empty, 
         Enemy, 
         Boss, 
         Loot
     }
-    
-    private static List<T> GetEnumList<T>() { 
-        var enumList = Enum.GetValues(typeof(T))
-            .Cast<T>().ToList();
-        return enumList;
-    }
-    
+
     private static Dir Opposite(Dir d) { 
         return d switch { 
             Dir.Up => Dir.Down, 
@@ -104,7 +97,7 @@ public class MapGen {
         };
     }
 
-    private readonly struct Coord { 
+    public readonly struct Coord { 
         public readonly int X; 
         public readonly int Y;
         
@@ -118,7 +111,7 @@ public class MapGen {
         }
     }
 
-    private readonly struct Room { 
+    public readonly struct Room { 
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
         
