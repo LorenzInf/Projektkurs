@@ -3,37 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelController : MonoBehaviour
-{
+public class LevelController : MonoBehaviour{
     public GameObject player;
-    public GameObject wall;
-    public GameObject floor;
+    private GameObject current;
 
-    public void Start(){
-        CreateLevel();
+    public void Move(GameObject room){
+        current = room;
+        player.transform.position = room.transform.position;
     }
 
-    public void ReadInput(string input){
-        
-    }
-
-    public void CreateLevel()
-    {
-
-    }
-
-    private void CreateObject(string typ,float x,float y) {
-        GameObject go=null;
-        switch (typ){
-            case "wall":
-                go = Instantiate(wall);
-                break;
-            case "floor":
-                go = Instantiate(floor);
-                break;
+    public void Move(MapGen.Dir dir){
+        if (current.GetComponent("RoomController") != null) {
+            //current.GetComponent("RoomController").Go(dir); TODO fix
         }
-
-        if (go != null)
-            go.transform.position += new Vector3(x, y, 0f);
     }
 }
