@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class MapGen {
+public class MapGen{
+
+	private LevelController lc;
+
+	public MapGen(LevelController lc){
+		this.lc=lc;
+	}
+
      public static Room?[,] Gen(int width, int height, int amountOfRooms) {
             var random = new System.Random();
             var map = new Room?[width, height];
@@ -128,4 +135,9 @@ public class MapGen {
             return $"{l}{u} {Type} {r}{d}";
         }
     }
+
+	public void GenerateMap(int width, int height, int amountOfRooms){
+		Room?[,] rooms=Gen(width,height,amountOfRooms);
+		
+	}
 }

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour{
     private static double _health;
     
     public GameObject player;
+    public LevelController level=null;
 
     public void Start(){
         _items = new ArrayList();
@@ -21,16 +22,17 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void HandleMovement(){
-        float x=0f, y=0f;
-        if (Input.GetKeyDown(KeyCode.W))
-            y++;
-        if (Input.GetKeyDown(KeyCode.A))
-            x--;
-        if (Input.GetKeyDown(KeyCode.S))
-            y--;
-        if (Input.GetKeyDown(KeyCode.D))
-            x++;
-        player.transform.position += new Vector3(x,y,0f);
+        if (level != null)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+                level.Move(MapGen.Dir.Up);
+            if (Input.GetKeyDown(KeyCode.A))
+                level.Move(MapGen.Dir.Left);
+            if (Input.GetKeyDown(KeyCode.S))
+                level.Move(MapGen.Dir.Down);
+            if (Input.GetKeyDown(KeyCode.D))
+                level.Move(MapGen.Dir.Right);
+        }
     }
 
     public void TakeDamage(int amount) {
