@@ -8,15 +8,15 @@ public class RoomController : MonoBehaviour {
     private MapGen.RoomType Type;
     private GameObject left=null, right=null, up=null, down=null;
 
-    public void Go(MapGen.Dir dir) {
+    public void Move(MapGen.Dir dir) {
         if (dir == MapGen.Dir.Left && left != null)
-            c.Move(left);
+            c.MovePlayer(left);
         else if (dir == MapGen.Dir.Right && right != null)
-            c.Move(right);
+            c.MovePlayer(right);
         else if (dir == MapGen.Dir.Up && up != null)
-            c.Move(up);
+            c.MovePlayer(up);
         else if (dir == MapGen.Dir.Down && down != null)
-            c.Move(down);
+            c.MovePlayer(down);
     }
     
 }
