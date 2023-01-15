@@ -18,5 +18,21 @@ public class RoomController : MonoBehaviour {
         else if (dir == MapGen.Dir.Down && down != null)
             c.MovePlayer(down);
     }
+
+    public void SetLeft(GameObject go){
+        left = go;
+    }
+
+    public void SetRight(GameObject go){
+        right = go;
+    }
+    
+    public void SetUp(GameObject go){
+        up = go;
+    }
+
+    public void SetDown(GameObject go){
+        down = go;
+    }
     
 }
