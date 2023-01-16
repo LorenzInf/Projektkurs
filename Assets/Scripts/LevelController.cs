@@ -5,45 +5,57 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour{
 
-	public GameObject room;
     public GameObject player;
-    private GameObject current;
+	public GameObject roomPrefab;
+	public GameObject currentRoom=null;
+    private int cx=-1,cy=-1,height=0,width=0;
+	private MapGen.Room?[,] r=null;
 
 	void Awake(){
 		CreateLevel(5,5,5);
 	}
 
 	public void CreateLevel(int height,int width,int amountOfRooms){
-		var rooms=MapGen.Gen(height,width,amountOfRooms);
-		int x=0,y=0;
-		while(rooms[x,y]==null){
-			x++;
-			if(x>=height){
-				x=0;
-				y++;
+		r=MapGen.Gen(height,width,amountOfRooms);
+		this.height=height;
+		this.width=width;
+		for(int i=0;i<height;i++){
+			for(int j=0;j<height;j++){
+				if(r[i,j].ToString().Contains("Starting")){
+					cx=i;
+					cy=j;
+				}
 			}
 		}
-		current=CreateRoom(x,y,rooms);
 	}
 
-	public GameObject CreateRoom(int x,int y,MapGen.Room?[,] r){
-		string s=r[x,y].ToString();
-		GameObject go=Instantiate(room, new Vector3(x, y, 0), Quaternion.identity);
-		RoomController rc=current.GetComponent("RoomController") as RoomController;
-		if(rc!=null){
-			
+	public void Move(MapGen.Dir dir){
+		int x=-1,y=-1;
+		if(dir==MapGen.Dir.Up){
+			x=cx;
+			y=cy-1;
+		}else if(dir==MapGen.Dir.Down){
+			x=cx;
+			y=cy+1;
+		}else if(dir==MapGen.Dir.Left){
+			x=cx-1;
+			y=cy;
+		}else if(dir==MapGen.Dir.Right){
+			x=cx+1;
+			y=cy;
 		}
-		return go;
+		if(IsValid(x,y)){
+			cx=x;
+			cy=y;
+			SetRoom(r[cx,cy]);
+		}
 	}
 
-    public void MovePlayer(GameObject room){
-        current = room;
-        player.transform.position = room.transform.position;
-    }
+	public bool IsValid(int x,int y){
+		return x>=0&&x<width&&y>=0&&y<height&&r[x,y]!=null;
+	}
 
-    public void Move(MapGen.Dir dir){
-		RoomController rc=current.GetComponent("RoomController") as RoomController;
-		if(rc!=null)
-			rc.Move(dir);
-    }
+	public void SetRoom(MapGen.Room? room){
+		Debug.Log(room.ToString());
+	}
 }
