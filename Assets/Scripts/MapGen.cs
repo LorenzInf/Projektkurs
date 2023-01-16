@@ -16,7 +16,7 @@ public class MapGen{
             var map = new Room?[width, height];
             
             var coords = new Coord(random.Next(0, width), random.Next(0, height));
-            map[coords.X, coords.Y] = new Room(RoomType.Empty, new List<Dir>());
+            map[coords.X, coords.Y] = new Room(RoomType.Starting, new List<Dir>());
             
             FillRec(map, coords, amountOfRooms - 1, random);
 
@@ -24,7 +24,8 @@ public class MapGen{
      }
 
      private static void FillRec(Room?[,] map, Coord coord, int amountOfRooms, System.Random random) {
-         var paths = FreeAround(map, coord); if (paths.Count < 1 || amountOfRooms < 1) {
+         var paths = FreeAround(map, coord); 
+		 if (paths.Count < 1 || amountOfRooms < 1) {
              return;
          }
             
@@ -37,15 +38,21 @@ public class MapGen{
              var pCoord = paths[i];
              
              map[coord.X, coord.Y]?.Dirs.Add(pCoord.Item2); 
-             var room = new Room(GetRandomRoom(), new List<Dir> { Opposite(pCoord.Item2) }); 
+             var room = new Room(GetRandomRoom(random), new List<Dir> { Opposite(pCoord.Item2) }); 
              map[pCoord.Item1.X, pCoord.Item1.Y] = room;
              
              FillRec(map, pCoord.Item1, nDistribution[i] - 1, random);
          }
      }
 
-     private static RoomType GetRandomRoom() { 
-         return RoomType.Boss;
+     private static RoomType GetRandomRoom(System.Random r) { 
+    	 var rooms = new List<RoomType>{
+        	RoomType.Enemy,
+        	RoomType.Loot,
+        	RoomType.Empty
+         };
+    	 int index = r.Next(rooms.Count);
+    	 return rooms[index];
      }
 
     private static List<int> Distribute(int total, int amount, System.Random random) { 
@@ -88,6 +95,7 @@ public class MapGen{
     }
         
     public enum RoomType {
+		Starting,
         Empty, 
         Enemy, 
         Boss, 
