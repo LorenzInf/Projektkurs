@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour{
 
     public GameObject player;
-	public GameObject roomPrefab;
+	public GameObject emptyroomPrefab;
+	public GameObject doorPrefab;
 	public GameObject currentRoom=null;
     private int cx=-1,cy=-1,height=0,width=0;
 	private MapGen.Room?[,] r=null;
@@ -55,7 +57,17 @@ public class LevelController : MonoBehaviour{
 		return x>=0&&x<width&&y>=0&&y<height&&r[x,y]!=null;
 	}
 
-	public void SetRoom(MapGen.Room? room){
+	public void SetRoom(MapGen.Room? room) {
+		Destroy(currentRoom);
+		if(room.ToString().Contains("Boss")){
+			SceneManager.LoadScene("Fight");
+		}else{
+			currentRoom = Instantiate(emptyroomPrefab);
+		}
 		Debug.Log(room.ToString());
+	}
+
+	public void GetLoot(){
+		
 	}
 }

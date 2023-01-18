@@ -123,10 +123,16 @@ public class MapGen{
     public readonly struct Room { 
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
+		public readonly List<ItemController> items;
         
         public Room(RoomType type, List<Dir> dirs) { 
             Type = type; 
             Dirs = dirs;
+			if(type==RoomType.Loot){
+				items=null;
+			}else{
+				items=null;
+			}
         }
         
         public override string ToString() { 
