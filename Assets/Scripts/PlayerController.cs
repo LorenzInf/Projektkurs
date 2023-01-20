@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour{
     
-    private static ArrayList _items;
-    private static ItemController _inHand;
-    private static double _health;
+    private static ArrayList _items=new ArrayList();
+    private static ItemController _inHand=null;
+    private static double _maxHealth=100;
+    private static double _health=100;
+    private static double _level=1;
     
     public GameObject player;
     public LevelController level=null;
@@ -37,6 +39,10 @@ public class PlayerController : MonoBehaviour{
 
     public void TakeDamage(int amount) {
         _health -= amount;
+    }
+
+    public void Heal(){
+        _health = _maxHealth;
     }
 
     public void AddItem(ItemController i){
