@@ -14,6 +14,7 @@ public class LevelController : MonoBehaviour{
 	private MapGen.Room?[,] r=null;
 
 	void Awake(){
+		DontDestroyOnLoad(this);
 		CreateLevel(5,5,5);
 	}
 
@@ -60,7 +61,9 @@ public class LevelController : MonoBehaviour{
 	public void SetRoom(MapGen.Room? room) {
 		Destroy(currentRoom);
 		if(room.ToString().Contains("Boss")){
-			SceneManager.LoadScene("Fight");
+			CreateFight(true);
+		}else if(room.ToString().Contains("Enemy")){
+			CreateFight(false);
 		}else{
 			currentRoom = Instantiate(emptyroomPrefab);
 		}
@@ -69,5 +72,15 @@ public class LevelController : MonoBehaviour{
 
 	public void GetLoot(){
 		
+	}
+
+	public void CreateFight(bool boss){
+		if(boss)
+			PlayerController.inBossFight=true;
+		SceneManager.LoadScene("Fight");
+	}
+
+	public void EndFight(){
+		SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
 	}
 }

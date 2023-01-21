@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour{
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
+    public static bool inBossFight=false;
     
     public GameObject player;
     public LevelController level=null;
@@ -53,5 +54,10 @@ public class PlayerController : MonoBehaviour{
         foreach (var item in _items){
             
         }
+    }
+
+    public static int GetLevel()
+    {
+        return (int)(_level);
     }
 }
