@@ -24,8 +24,7 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void HandleMovement(){
-        if (level != null)
-        {
+        if (level != null){
             if (Input.GetKeyDown(KeyCode.W))
                 level.Move(MapGen.Dir.Up);
             if (Input.GetKeyDown(KeyCode.A))

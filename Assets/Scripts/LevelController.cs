@@ -41,16 +41,17 @@ public class LevelController : MonoBehaviour{
 
 	public void Move(MapGen.Dir dir){
 		int x=-1,y=-1;
-		if(dir==MapGen.Dir.Up){
+		string s = r[cx,cy].ToString();
+		if(dir==MapGen.Dir.Up&&s.Contains("^")){
 			x=cx;
 			y=cy-1;
-		}else if(dir==MapGen.Dir.Down){
+		}else if(dir==MapGen.Dir.Down&&s.Contains("v")){
 			x=cx;
 			y=cy+1;
-		}else if(dir==MapGen.Dir.Left){
+		}else if(dir==MapGen.Dir.Left&&s.Contains("<")){
 			x=cx-1;
 			y=cy;
-		}else if(dir==MapGen.Dir.Right){
+		}else if(dir==MapGen.Dir.Right&&s.Contains(">")){
 			x=cx+1;
 			y=cy;
 		}
