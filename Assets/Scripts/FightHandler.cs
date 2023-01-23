@@ -18,9 +18,10 @@ public class FightHandler : MonoBehaviour{
 	}
 
 	public void Update(){
-		currentAttack.time+=Time.deltaTime;
-		if(currentAttack.time>=10-0.2*currentAttack.level){
-			EndAttack();
+		if(currentAttack!=null){
+			currentAttack.time+=Time.deltaTime;
+			if(currentAttack.time>=10-0.2*currentAttack.level)
+				EndAttack();
 		}
 	}
     

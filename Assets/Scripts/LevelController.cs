@@ -8,14 +8,19 @@ public class LevelController : MonoBehaviour{
 
     public GameObject player;
 	public GameObject emptyroomPrefab;
-	public GameObject doorPrefab;
-	public GameObject currentRoom=null;
-    private int cx=-1,cy=-1,height=0,width=0;
+	public GameObject doorOpenPrefab;
+	public GameObject doorClosePrefab;
+	public GameObject sideDoorOpenPrefab;
+	public GameObject sideDoorClosePrefab;
+
+	private List<GameObject> currentRoom = new List<GameObject>();
+	private int cx=-1,cy=-1,height=0,width=0;
 	private MapGen.Room?[,] r=null;
 
 	void Awake(){
 		DontDestroyOnLoad(this);
 		CreateLevel(5,5,5);
+		SetRoom(r[cx,cy]);
 	}
 
 	public void CreateLevel(int height,int width,int amountOfRooms){
@@ -59,13 +64,31 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public void SetRoom(MapGen.Room? room) {
-		Destroy(currentRoom);
+		foreach (GameObject go in currentRoom){
+			Destroy(go);
+		}
+		currentRoom.Clear();
 		if(room.ToString().Contains("Boss")){
 			CreateFight(true);
 		}else if(room.ToString().Contains("Enemy")){
 			CreateFight(false);
 		}else{
-			currentRoom = Instantiate(emptyroomPrefab);
+			currentRoom.Add(Instantiate(emptyroomPrefab));
+			string s = room.ToString();
+			if(s.Contains("^"))
+				currentRoom.Add(Instantiate(doorClosePrefab));
+			if (s.Contains("v")){
+				GameObject go = Instantiate(doorClosePrefab);
+				go.transform.position = new Vector3(0f,-3.7f, 0f);
+				currentRoom.Add(go);
+			}
+			if(s.Contains(">"))
+				currentRoom.Add(Instantiate(sideDoorClosePrefab));
+			if (s.Contains("<")){
+				GameObject go = Instantiate(sideDoorClosePrefab);
+				go.transform.position = new Vector3(-10.2f,0f, 0f);
+				currentRoom.Add(go);
+			}
 		}
 		Debug.Log(room.ToString());
 	}
