@@ -9,11 +9,11 @@ public class LevelController : MonoBehaviour{
     public GameObject player;
 	public GameObject emptyroomPrefab;
 	public GameObject doorOpenPrefab;
-	public GameObject doorClosePrefab;
+	public GameObject doorClosedPrefab;
 	public GameObject sideDoorOpenPrefab;
-	public GameObject sideDoorClosePrefab;
+	public GameObject sideDoorClosedPrefab;
 	public GameObject ChestOpenPrefab;
-	public GameObject ChestClosePrefab;
+	public GameObject ChestClosedPrefab;
 
 	private List<GameObject> currentRoom = new List<GameObject>();
 	private int cx=-1,cy=-1,height=0,width=0;
@@ -81,16 +81,16 @@ public class LevelController : MonoBehaviour{
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));
 			if(s.Contains("^"))
-				currentRoom.Add(Instantiate(doorClosePrefab));
+				currentRoom.Add(Instantiate(doorClosedPrefab));
 			if (s.Contains("v")){
-				GameObject go = Instantiate(doorClosePrefab);
+				GameObject go = Instantiate(doorClosedPrefab);
 				go.transform.position = new Vector3(0f,-3.7f, 0f);
 				currentRoom.Add(go);
 			}
 			if(s.Contains(">"))
-				currentRoom.Add(Instantiate(sideDoorClosePrefab));
+				currentRoom.Add(Instantiate(sideDoorClosedPrefab));
 			if (s.Contains("<")){
-				GameObject go = Instantiate(sideDoorClosePrefab);
+				GameObject go = Instantiate(sideDoorClosedPrefab);
 				go.transform.position = new Vector3(-10.2f,0f, 0f);
 				currentRoom.Add(go);
 			}
@@ -98,7 +98,7 @@ public class LevelController : MonoBehaviour{
 				if (room?.GetItems() != null) {
 					currentRoom.Add(Instantiate(ChestOpenPrefab));
 				}else {
-					currentRoom.Add(Instantiate(ChestClosePrefab));
+					currentRoom.Add(Instantiate(ChestClosedPrefab));
 				}
 			}
 		}
