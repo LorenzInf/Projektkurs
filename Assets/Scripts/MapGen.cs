@@ -120,8 +120,8 @@ public class MapGen{
         }
     }
 
-    public readonly struct Room { 
-        public readonly RoomType Type; 
+    public struct Room { 
+        public RoomType Type; 
         public readonly List<Dir> Dirs;
 		public readonly List<ItemController> items;
         
@@ -133,6 +133,14 @@ public class MapGen{
 			}else{
 				items=null;
 			}
+        }
+
+        public List<ItemController> GetItems(){
+            return items;
+        }
+
+        public void SetRoomType(RoomType type){
+            Type = type;
         }
         
         public override string ToString() { 

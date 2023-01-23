@@ -284,8 +284,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1315814565}
   emptyroomPrefab: {fileID: 515431455}
-  doorPrefab: {fileID: 0}
-  currentRoom: {fileID: 0}
+  doorOpenPrefab: {fileID: 8611131244417396361, guid: fd90d97ce90c7b54980c0012bc2986e5, type: 3}
+  doorClosePrefab: {fileID: 5924358151803295443, guid: 2c2f997fcbfd9e243b9c143255ac6464, type: 3}
+  sideDoorOpenPrefab: {fileID: 0}
+  sideDoorClosePrefab: {fileID: 7989141169727026204, guid: 80776e2fad281f2428ad78b134d98d8f, type: 3}
 --- !u!1 &670582325
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,9 @@ public class FightHandler : MonoBehaviour{
 	private Attack currentAttack=null;
 
 	public void Awake(){
-		SetUpFight(PlayerController.inBossFight);
+		SetUpFight(FightConfig.IsBoss());
+
+		EndFight();
 	}
 
 	public void Update(){
@@ -34,7 +36,11 @@ public class FightHandler : MonoBehaviour{
     }
 
 	public void EndFight(){
-		SceneManager.LoadScene("Level");
+		if(FightConfig.IsBoss()){
+			SceneManager.LoadScene("Hub");
+		}else{
+			SceneManager.LoadScene("Level");
+		}
 	}
 
 	public void StartAttack(int lvl){

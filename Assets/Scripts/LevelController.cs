@@ -12,6 +12,8 @@ public class LevelController : MonoBehaviour{
 	public GameObject doorClosePrefab;
 	public GameObject sideDoorOpenPrefab;
 	public GameObject sideDoorClosePrefab;
+	public GameObject ChestOpenPrefab;
+	public GameObject ChestClosePrefab;
 
 	private List<GameObject> currentRoom = new List<GameObject>();
 	private int cx=-1,cy=-1,height=0,width=0;
@@ -68,13 +70,15 @@ public class LevelController : MonoBehaviour{
 			Destroy(go);
 		}
 		currentRoom.Clear();
-		if(room.ToString().Contains("Boss")){
+		string s = room.ToString();
+		if(s.Contains("Boss")){
+			room?.SetRoomType(MapGen.RoomType.Empty);
 			CreateFight(true);
-		}else if(room.ToString().Contains("Enemy")){
+		}else if(s.Contains("Enemy")){
+			room?.SetRoomType(MapGen.RoomType.Empty);
 			CreateFight(false);
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));
-			string s = room.ToString();
 			if(s.Contains("^"))
 				currentRoom.Add(Instantiate(doorClosePrefab));
 			if (s.Contains("v")){
@@ -89,6 +93,13 @@ public class LevelController : MonoBehaviour{
 				go.transform.position = new Vector3(-10.2f,0f, 0f);
 				currentRoom.Add(go);
 			}
+			if (s.Contains("Loot")) {
+				if (room?.GetItems() != null) {
+					currentRoom.Add(Instantiate(ChestOpenPrefab));
+				}else {
+					currentRoom.Add(Instantiate(ChestClosePrefab));
+				}
+			}
 		}
 		Debug.Log(room.ToString());
 	}
@@ -97,9 +108,9 @@ public class LevelController : MonoBehaviour{
 		
 	}
 
-	public void CreateFight(bool boss){
-		if(boss)
-			PlayerController.inBossFight=true;
+	public void CreateFight(bool boss)
+	{
+		FightConfig.SetBoss(boss);
 		SceneManager.LoadScene("Fight");
 	}
 

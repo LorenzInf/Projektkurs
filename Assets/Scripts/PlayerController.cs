@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour{
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
-    public static bool inBossFight=false;
     
     public GameObject player;
     public LevelController level=null;
