@@ -280,11 +280,11 @@ MonoBehaviour:
   player: {fileID: 1315814565}
   emptyroomPrefab: {fileID: 3961471625522651408, guid: 409014bff6fc3914e81a763eb2aa3184, type: 3}
   doorOpenPrefab: {fileID: 8611131244417396361, guid: fd90d97ce90c7b54980c0012bc2986e5, type: 3}
-  doorClosePrefab: {fileID: 5924358151803295443, guid: 2c2f997fcbfd9e243b9c143255ac6464, type: 3}
+  doorClosedPrefab: {fileID: 5924358151803295443, guid: 2c2f997fcbfd9e243b9c143255ac6464, type: 3}
   sideDoorOpenPrefab: {fileID: 1761277968025859369, guid: d14ff0fac57bb874cb4e08bc5eefcab2, type: 3}
-  sideDoorClosePrefab: {fileID: 7989141169727026204, guid: 80776e2fad281f2428ad78b134d98d8f, type: 3}
+  sideDoorClosedPrefab: {fileID: 7989141169727026204, guid: 80776e2fad281f2428ad78b134d98d8f, type: 3}
   ChestOpenPrefab: {fileID: 5181872600465813203, guid: c104323d939cbc94da8b12eee4f4f9fd, type: 3}
-  ChestClosePrefab: {fileID: 8860459558551443666, guid: 982e3805c0d6a9c44bcd2657fd7b0cfb, type: 3}
+  ChestClosedPrefab: {fileID: 8860459558551443666, guid: 982e3805c0d6a9c44bcd2657fd7b0cfb, type: 3}
 --- !u!1 &670582325
 GameObject:
   m_ObjectHideFlags: 0
