@@ -5,14 +5,19 @@ using System;
 
 public class MapGen{
 
+	 private static Coord last;
+    
+
      public static Room?[,] Gen(int width, int height, int amountOfRooms) {
             var random = new System.Random();
             var map = new Room?[width, height];
             
             var coords = new Coord(random.Next(0, width), random.Next(0, height));
             map[coords.X, coords.Y] = new Room(RoomType.Starting, new List<Dir>());
-            
+		
             FillRec(map, coords, amountOfRooms - 1, random);
+
+			map[last.X, last.Y] = new Room(RoomType.Boss, map[last.X, last.Y]?.Dirs);
 
             return map;
      }
@@ -34,7 +39,7 @@ public class MapGen{
              map[coord.X, coord.Y]?.Dirs.Add(pCoord.Item2); 
              var room = new Room(GetRandomRoom(random), new List<Dir> { Opposite(pCoord.Item2) }); 
              map[pCoord.Item1.X, pCoord.Item1.Y] = room;
-             
+             last = pCoord.Item1;
              FillRec(map, pCoord.Item1, nDistribution[i] - 1, random);
          }
      }
