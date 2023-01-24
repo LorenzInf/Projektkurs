@@ -90,7 +90,8 @@ public class MapGen{
         Left, 
         Right, 
         Up, 
-        Down
+        Down,
+		Null
     }
         
     public enum RoomType {
@@ -126,13 +127,15 @@ public class MapGen{
     }
 
     public struct Room { 
-        public RoomType Type; 
+        public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
 		public List<ItemController> items;
+		public bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
             Type = type; 
             Dirs = dirs;
+			visited=false;
 			if(type==RoomType.Loot){
 				items=null;
 			}else{
@@ -150,11 +153,12 @@ public class MapGen{
             return itemsList;
         }
 
-        public string SetRoomType(RoomType type) {
-            string s = Type+" ";
-            Type = type;
-            return s+" "+Type;
-        }
+        public bool Visited(bool b){
+			if(b){
+				visited=true;
+			}
+			return visited;
+		}
         
         public override string ToString() { 
             var l = Dirs.Contains(Dir.Left) ? "<" : " ";
