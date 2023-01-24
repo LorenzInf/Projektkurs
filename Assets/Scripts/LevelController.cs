@@ -16,20 +16,20 @@ public class LevelController : MonoBehaviour{
 	public GameObject ChestClosedPrefab;
 
 	private static List<GameObject> currentRoom = new List<GameObject>();
-	private static int cx=-1,cy=-1;
-	private static MapGen.Room?[,] r=null;
+	private static int cx = -1,cy = -1;
+	private static MapGen.Room?[,] r = null;
 
 	void Start(){
 		player=GameObject.Find("Player");
 		if(r==null)
-			SetUpLevel();
+			SetUpLevel(5,5,5);
 		SetRoom();
 	}
 
-	public void SetUpLevel(){
-		r=MapGen.Gen(5,5,5);
-		for(int i=0;i<5;i++){
-			for(int j=0;j<5;j++){
+	public void SetUpLevel(int width, int height, int amountOfRooms){
+		r=MapGen.Gen(width,height,amountOfRooms);
+		for(int i=0;i<width;i++){
+			for(int j=0;j<height;j++){
 				if(r[i,j].ToString().Contains("Starting")){
 					cx=i;
 					cy=j;
@@ -54,39 +54,62 @@ public class LevelController : MonoBehaviour{
 
 	public void SetRoom(){
 		MapGen.Room? room = r[cx,cy];
+		room?.Visited(true);
 		foreach (GameObject go in currentRoom){
 			Destroy(go);
 		}
 		currentRoom.Clear();
 		string s = room.ToString();
 		if(s.Contains("Boss")){
-			r[cx,cy]?.SetRoomType(MapGen.RoomType.Empty);
 			CreateFight(true);
 		}else if(s.Contains("Enemy")){
-			Debug.Log(r[cx,cy]?.SetRoomType(MapGen.RoomType.Empty));
 			CreateFight(false);
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));
-			if(s.Contains("^"))
-				currentRoom.Add(Instantiate(doorClosedPrefab));
-			if (s.Contains("v")){
-				GameObject go = Instantiate(doorClosedPrefab);
-				go.transform.position = new Vector3(0f,-3.7f,-1f);
-				currentRoom.Add(go);
+			bool open = false;
+			if(s.Contains("^")){
+				open = (bool)(r[cx,cy-1]?.Visited(false));
+				if (open){
+					currentRoom.Add(Instantiate(doorOpenPrefab));
+				}else{
+					currentRoom.Add(Instantiate(doorClosedPrefab));
+				}
 			}
-			if(s.Contains(">"))
-				currentRoom.Add(Instantiate(sideDoorClosedPrefab));
+			if (s.Contains("v")){
+				open = (bool)(r[cx,cy+1]?.Visited(false));
+				if(open){
+					GameObject go = Instantiate(doorOpenPrefab);
+					go.transform.position = new Vector3(0f,-3.7f,-1f);
+					currentRoom.Add(go);
+				}else{
+					GameObject go = Instantiate(doorClosedPrefab);
+					go.transform.position = new Vector3(0f,-3.7f,-1f);
+					currentRoom.Add(go);
+				}
+			}
+			if (s.Contains(">")){
+				open = (bool)(r[cx+1,cy]?.Visited(false));
+				if(open){
+					currentRoom.Add(Instantiate(sideDoorOpenPrefab));
+				}else{
+					currentRoom.Add(Instantiate(sideDoorClosedPrefab));
+				}
+			}
 			if (s.Contains("<")){
-				GameObject go = Instantiate(sideDoorClosedPrefab);
-				go.transform.position = new Vector3(-10.2f,0f,0f);
-				currentRoom.Add(go);
+				open = (bool)(r[cx-1,cy]?.Visited(false));
+				if(open){
+					GameObject go = Instantiate(sideDoorOpenPrefab);
+					go.transform.position = new Vector3(-9.8f,-0.3f,0f);
+					go.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+					currentRoom.Add(go);
+				}else{
+					GameObject go = Instantiate(sideDoorClosedPrefab);
+					go.transform.position = new Vector3(-10.2f,0f,0f);
+					currentRoom.Add(go);
+				}
 			}
 			if (s.Contains("Loot")) {
-				if (room?.GetItems() != null) {
-					currentRoom.Add(Instantiate(ChestClosedPrefab));
-				}else {
-					currentRoom.Add(Instantiate(ChestOpenPrefab));
-				}
+				currentRoom.Add(Instantiate(ChestOpenPrefab));
 			}
 		}
 		Debug.Log("x="+cx+" y="+cy);
