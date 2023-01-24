@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FightConfig : MonoBehaviour
 {
-    private static bool _isBoss = false;
+    private static bool _isBoss = true;
     
     public static bool IsBoss(){
         return _isBoss;

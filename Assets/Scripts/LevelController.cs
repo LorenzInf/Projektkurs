@@ -15,22 +15,21 @@ public class LevelController : MonoBehaviour{
 	public GameObject ChestOpenPrefab;
 	public GameObject ChestClosedPrefab;
 
-	private List<GameObject> currentRoom = new List<GameObject>();
-	private int cx=-1,cy=-1,height=0,width=0;
-	private MapGen.Room?[,] r=null;
+	private static List<GameObject> currentRoom = new List<GameObject>();
+	private static int cx=-1,cy=-1;
+	private static MapGen.Room?[,] r=null;
 
-	void Awake(){
-		DontDestroyOnLoad(this);
-		CreateLevel(5,5,5);
-		SetRoom(r[cx,cy]);
+	void Start(){
+		player=GameObject.Find("Player");
+		if(r==null)
+			SetUpLevel();
+		SetRoom();
 	}
 
-	public void CreateLevel(int height,int width,int amountOfRooms){
-		r=MapGen.Gen(height,width,amountOfRooms);
-		this.height=height;
-		this.width=width;
-		for(int i=0;i<height;i++){
-			for(int j=0;j<height;j++){
+	public void SetUpLevel(){
+		r=MapGen.Gen(5,5,5);
+		for(int i=0;i<5;i++){
+			for(int j=0;j<5;j++){
 				if(r[i,j].ToString().Contains("Starting")){
 					cx=i;
 					cy=j;
@@ -40,43 +39,31 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public void Move(MapGen.Dir dir){
-		int x=-1,y=-1;
 		string s = r[cx,cy].ToString();
 		if(dir==MapGen.Dir.Up&&s.Contains("^")){
-			x=cx;
-			y=cy-1;
+			cy--;
 		}else if(dir==MapGen.Dir.Down&&s.Contains("v")){
-			x=cx;
-			y=cy+1;
+			cy++;
 		}else if(dir==MapGen.Dir.Left&&s.Contains("<")){
-			x=cx-1;
-			y=cy;
+			cx--;
 		}else if(dir==MapGen.Dir.Right&&s.Contains(">")){
-			x=cx+1;
-			y=cy;
+			cx++;
 		}
-		if(IsValid(x,y)){
-			cx=x;
-			cy=y;
-			SetRoom(r[cx,cy]);
-		}
+		SetRoom();
 	}
 
-	public bool IsValid(int x,int y){
-		return x>=0&&x<width&&y>=0&&y<height&&r[x,y]!=null;
-	}
-
-	public void SetRoom(MapGen.Room? room) {
+	public void SetRoom(){
+		MapGen.Room? room = r[cx,cy];
 		foreach (GameObject go in currentRoom){
 			Destroy(go);
 		}
 		currentRoom.Clear();
 		string s = room.ToString();
 		if(s.Contains("Boss")){
-			room?.SetRoomType(MapGen.RoomType.Empty);
+			r[cx,cy]?.SetRoomType(MapGen.RoomType.Empty);
 			CreateFight(true);
 		}else if(s.Contains("Enemy")){
-			room?.SetRoomType(MapGen.RoomType.Empty);
+			Debug.Log(r[cx,cy]?.SetRoomType(MapGen.RoomType.Empty));
 			CreateFight(false);
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));
@@ -84,38 +71,46 @@ public class LevelController : MonoBehaviour{
 				currentRoom.Add(Instantiate(doorClosedPrefab));
 			if (s.Contains("v")){
 				GameObject go = Instantiate(doorClosedPrefab);
-				go.transform.position = new Vector3(0f,-3.7f, 0f);
+				go.transform.position = new Vector3(0f,-3.7f,-1f);
 				currentRoom.Add(go);
 			}
 			if(s.Contains(">"))
 				currentRoom.Add(Instantiate(sideDoorClosedPrefab));
 			if (s.Contains("<")){
 				GameObject go = Instantiate(sideDoorClosedPrefab);
-				go.transform.position = new Vector3(-10.2f,0f, 0f);
+				go.transform.position = new Vector3(-10.2f,0f,0f);
 				currentRoom.Add(go);
 			}
 			if (s.Contains("Loot")) {
 				if (room?.GetItems() != null) {
-					currentRoom.Add(Instantiate(ChestOpenPrefab));
-				}else {
 					currentRoom.Add(Instantiate(ChestClosedPrefab));
+				}else {
+					currentRoom.Add(Instantiate(ChestOpenPrefab));
 				}
 			}
 		}
+		Debug.Log("x="+cx+" y="+cy);
 		Debug.Log(room.ToString());
 	}
 
-	public void GetLoot(){
-		
-	}
-
-	public void CreateFight(bool boss)
+	public void HandleInput(string s)
 	{
-		FightConfig.SetBoss(boss);
-		SceneManager.LoadScene("Fight");
+		s = s.ToLower();
+		switch (s)
+		{
+			case "get loot":
+				GetLoot();
+				break;
+		}
 	}
 
-	public void EndFight(){
-		SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
+	public void GetLoot() {
+		r[cx,cy]?.TakeItems();
+	}
+
+	public void CreateFight(bool boss){
+		FightConfig.SetBoss(boss);
+		Destroy(gameObject);
+		SceneManager.LoadScene("Fight");
 	}
 }
