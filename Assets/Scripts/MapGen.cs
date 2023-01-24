@@ -90,7 +90,8 @@ public class MapGen{
         Left, 
         Right, 
         Up, 
-        Down
+        Down,
+		Null
     }
         
     public enum RoomType {

@@ -431,6 +431,10 @@ PrefabInstance:
       propertyPath: level
       value: 
       objectReference: {fileID: 573594606}
+    - target: {fileID: -7856917466215053375, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
+      propertyPath: canMove
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5112025181532477066, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
       propertyPath: m_RootOrder
       value: 1
