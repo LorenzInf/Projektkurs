@@ -27,12 +27,19 @@ public class FightHandler : MonoBehaviour{
 
     public void HandleInput(string s){
 	    s = s.ToLower();
-	    switch (s)
-	    {
-		    case "win":
-			    EndFight();
-			    break;
+
+	    var w = PlayerController.GetWeapon(s);
+	    if (w != null) {
+		    if (w.CanBeUsed()) {
+			    double value = w.Use();
+			    // ???
+		    } else {
+			    // ???
+		    }
+	    } else {
+		    // auf xaver warten
 	    }
+	    
     }
 
 	public void EndFight(){
