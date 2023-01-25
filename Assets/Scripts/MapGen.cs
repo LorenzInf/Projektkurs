@@ -8,21 +8,21 @@ public class MapGen{
 	 private static Coord last;
     
 
-     public static Room?[,] Gen(int width, int height, int amountOfRooms) {
+     public static Room[,] Gen(int width, int height, int amountOfRooms) {
             var random = new System.Random();
-            var map = new Room?[width, height];
+            var map = new Room[width, height];
             
             var coords = new Coord(random.Next(0, width), random.Next(0, height));
             map[coords.X, coords.Y] = new Room(RoomType.Starting, new List<Dir>());
 		
             FillRec(map, coords, amountOfRooms - 1, random);
 
-			map[last.X, last.Y] = new Room(RoomType.Boss, map[last.X, last.Y]?.Dirs);
+			map[last.X, last.Y] = new Room(RoomType.Boss, map[last.X, last.Y].Dirs);
 
             return map;
      }
 
-     private static void FillRec(Room?[,] map, Coord coord, int amountOfRooms, System.Random random) {
+     private static void FillRec(Room[,] map, Coord coord, int amountOfRooms, System.Random random) {
          var paths = FreeAround(map, coord); 
 		 if (paths.Count < 1 || amountOfRooms < 1) {
              return;
@@ -36,7 +36,7 @@ public class MapGen{
          for (var i = 0; i < nDistribution.Count; i++) { 
              var pCoord = paths[i];
              
-             map[coord.X, coord.Y]?.Dirs.Add(pCoord.Item2); 
+             map[coord.X, coord.Y].Dirs.Add(pCoord.Item2); 
              var room = new Room(GetRandomRoom(random), new List<Dir> { Opposite(pCoord.Item2) }); 
              map[pCoord.Item1.X, pCoord.Item1.Y] = room;
              last = pCoord.Item1;
@@ -66,7 +66,7 @@ public class MapGen{
         return distribution.Select(d => (int) Math.Round(d / sum * total)).ToList();
     }
 
-    private static List<(Coord, Dir)> FreeAround(Room?[,] rooms, Coord coord) { 
+    private static List<(Coord, Dir)> FreeAround(Room[,] rooms, Coord coord) { 
         var x = coord.X; 
         var y = coord.Y;
         
@@ -126,11 +126,12 @@ public class MapGen{
         }
     }
 
-    public struct Room { 
+    public class Room { 
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
-		public List<ItemController> items;
-		public bool visited;
+
+		private List<PlayerController.Item> items;
+		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
             Type = type; 
@@ -143,11 +144,11 @@ public class MapGen{
 			}
         }
 
-        public List<ItemController> GetItems(){
+        public List<PlayerController.Item> GetItems(){
             return items;
         }
 
-        public List<ItemController> TakeItems(){
+        public List<PlayerController.Item> TakeItems(){
             var itemsList = items;
             items = null;
             return itemsList;

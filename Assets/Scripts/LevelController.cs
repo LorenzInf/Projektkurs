@@ -17,7 +17,7 @@ public class LevelController : MonoBehaviour{
 
 	private static List<GameObject> currentRoom = new List<GameObject>();
 	private static int cx = -1,cy = -1;
-	private static MapGen.Room?[,] r = null;
+	private static MapGen.Room[,] r = null;
 
 	void Start(){
 		player=GameObject.Find("Player");
@@ -26,11 +26,11 @@ public class LevelController : MonoBehaviour{
 		SetRoom();
 	}
 
-	public void SetUpLevel(int width, int height, int amountOfRooms){
+	private void SetUpLevel(int width, int height, int amountOfRooms){
 		r=MapGen.Gen(width,height,amountOfRooms);
 		for(int i=0;i<width;i++){
 			for(int j=0;j<height;j++){
-				if(r[i,j].ToString().Contains("Starting")){
+				if(r[i,j]!=null&&r[i,j].ToString().Contains("Starting")){
 					cx=i;
 					cy=j;
 				}
@@ -52,23 +52,37 @@ public class LevelController : MonoBehaviour{
 		SetRoom();
 	}
 
-	public void SetRoom(){
-		MapGen.Room? room = r[cx,cy];
-		room?.Visited(true);
+	public bool CanMove(MapGen.Dir dir){
+		string s = r[cx,cy].ToString();
+		if(dir==MapGen.Dir.Up&&s.Contains("^")){
+			return true;
+		}else if(dir==MapGen.Dir.Down&&s.Contains("v")){
+			return true;
+		}else if(dir==MapGen.Dir.Left&&s.Contains("<")){
+			return true;
+		}else if(dir==MapGen.Dir.Right&&s.Contains(">")){
+			return true;
+		}
+		return false;
+	}
+
+	private void SetRoom(){
+		MapGen.Room room = r[cx,cy];
 		foreach (GameObject go in currentRoom){
 			Destroy(go);
 		}
 		currentRoom.Clear();
+		bool b = room.Visited(false);
 		string s = room.ToString();
-		if(s.Contains("Boss")){
+		if(s.Contains("Boss")&&!b){
 			CreateFight(true);
-		}else if(s.Contains("Enemy")){
+		}else if(s.Contains("Enemy")&&!b){
 			CreateFight(false);
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));
 			bool open = false;
 			if(s.Contains("^")){
-				open = (bool)(r[cx,cy-1]?.Visited(false));
+				open = r[cx,cy-1].Visited(false);
 				if (open){
 					currentRoom.Add(Instantiate(doorOpenPrefab));
 				}else{
@@ -76,7 +90,7 @@ public class LevelController : MonoBehaviour{
 				}
 			}
 			if (s.Contains("v")){
-				open = (bool)(r[cx,cy+1]?.Visited(false));
+				open = r[cx,cy+1].Visited(false);
 				if(open){
 					GameObject go = Instantiate(doorOpenPrefab);
 					go.transform.position = new Vector3(0f,-3.7f,-1f);
@@ -88,7 +102,7 @@ public class LevelController : MonoBehaviour{
 				}
 			}
 			if (s.Contains(">")){
-				open = (bool)(r[cx+1,cy]?.Visited(false));
+				open = r[cx+1,cy].Visited(false);
 				if(open){
 					currentRoom.Add(Instantiate(sideDoorOpenPrefab));
 				}else{
@@ -96,7 +110,7 @@ public class LevelController : MonoBehaviour{
 				}
 			}
 			if (s.Contains("<")){
-				open = (bool)(r[cx-1,cy]?.Visited(false));
+				open = r[cx-1,cy].Visited(false);
 				if(open){
 					GameObject go = Instantiate(sideDoorOpenPrefab);
 					go.transform.position = new Vector3(-9.8f,-0.3f,0f);
@@ -112,6 +126,7 @@ public class LevelController : MonoBehaviour{
 				currentRoom.Add(Instantiate(ChestOpenPrefab));
 			}
 		}
+		room.Visited(true);
 		Debug.Log("x="+cx+" y="+cy);
 		Debug.Log(room.ToString());
 	}
@@ -127,11 +142,11 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
-	public void GetLoot() {
-		r[cx,cy]?.TakeItems();
+	private void GetLoot() {
+		r[cx,cy].TakeItems();
 	}
 
-	public void CreateFight(bool boss){
+	private void CreateFight(bool boss){
 		FightConfig.SetBoss(boss);
 		Destroy(gameObject);
 		SceneManager.LoadScene("Fight");
