@@ -130,7 +130,8 @@ public class MapGen{
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
 
-		private List<PlayerController.Item> items;
+		private PlayerController.Item item=PlayerController.Item.Null;
+		private WeaponController weapon=null;
 		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
@@ -138,20 +139,26 @@ public class MapGen{
             Dirs = dirs;
 			visited=false;
 			if(type==RoomType.Loot){
-				items=null;
-			}else{
-				items=null;
+				GenerateLoot();
 			}
         }
 
-        public List<PlayerController.Item> GetItems(){
-            return items;
+        public string GetLoot(){
+            if(item!=PlayerController.Item.Null) return "item";
+			if(weapon!=null) return "weapon";
+			return "null";
         }
 
-        public List<PlayerController.Item> TakeItems(){
-            var itemsList = items;
-            items = null;
-            return itemsList;
+        public PlayerController.Item TakeItem(){
+            var itemVar = item;
+            item = PlayerController.Item.Null;
+            return itemVar;
+        }
+
+		public WeaponController TakeWeapon(){
+            var weaponVar = weapon;
+            weapon = null;
+            return weaponVar;
         }
 
         public bool Visited(bool b){
@@ -159,6 +166,23 @@ public class MapGen{
 				visited=true;
 			}
 			return visited;
+		}
+
+		private void GenerateLoot(){
+			Random rnd = new Random();
+        	double r=rnd.Next(0,1);
+			if(r<0.5){
+				r=rnd.Next(0,3);
+				if(r<1){
+					item=PlayerController.Item.AmmoBox;
+				}else if(r>2){
+					item=PlayerController.Item.RepairKit;
+				}else{
+					item=PlayerController.Item.HealingPotion;
+				}
+			}else if(r>0.5){
+				
+			}
 		}
         
         public override string ToString() { 

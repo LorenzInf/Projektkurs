@@ -21,8 +21,11 @@ public class LevelController : MonoBehaviour{
 
 	void Start(){
 		player=GameObject.Find("Player");
-		if(r==null)
-			SetUpLevel(5,5,5);
+		if (r == null){
+			SetUpLevel(5, 5, 5);
+			(player.GetComponent("PlayerController") as PlayerController).Reset();
+		}
+
 		SetRoom();
 	}
 
@@ -123,7 +126,12 @@ public class LevelController : MonoBehaviour{
 				}
 			}
 			if (s.Contains("Loot")) {
-				currentRoom.Add(Instantiate(ChestOpenPrefab));
+				s = room.GetLoot();
+				if (s.Contains("Null")){
+					currentRoom.Add(Instantiate(ChestOpenPrefab));
+				}else{
+					currentRoom.Add(Instantiate(ChestClosedPrefab));
+				}
 			}
 		}
 		room.Visited(true);
@@ -131,8 +139,7 @@ public class LevelController : MonoBehaviour{
 		Debug.Log(room.ToString());
 	}
 
-	public void HandleInput(string s)
-	{
+	public void HandleInput(string s) {
 		s = s.ToLower();
 		switch (s)
 		{
@@ -143,7 +150,13 @@ public class LevelController : MonoBehaviour{
 	}
 
 	private void GetLoot() {
-		r[cx,cy].TakeItems();
+		MapGen.Room room = r[cx, cy];
+		string s = room.GetLoot();
+		if (s.Contains("item")){
+			(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
+		}else if (s.Contains("weapon")){
+			(player.GetComponent("PlayerController") as PlayerController).AddWeapon(room.TakeWeapon());
+		}
 	}
 
 	private void CreateFight(bool boss){

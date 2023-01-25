@@ -7,11 +7,13 @@ public class PlayerController : MonoBehaviour{
 	
 	public enum Item {
 		AmmoBox,
-		HealingPotion
+		HealingPotion,
+		RepairKit,
+		Null
 	}
     
     private static List<Item> _items=new List<Item>();
-    private static Dictionary<string, WeaponController> _wappons = new Dictionary<string,WeaponController>();
+    private static Dictionary<string, WeaponController> _weapons = new Dictionary<string,WeaponController>();
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
@@ -93,6 +95,12 @@ public class PlayerController : MonoBehaviour{
 		}
 	}
 
+	public void Reset(){
+		_items=new List<Item>();
+		_weapons = new Dictionary<string,WeaponController>();
+		AddWeapon(WeaponController.CreateNewWeapon("Branch","Branch"));
+	}
+
     public void TakeDamage(int amount) {
         _health -= amount;
     }
@@ -105,8 +113,19 @@ public class PlayerController : MonoBehaviour{
         _items.Add(i);
     }
     
-    public void AddWappon(WeaponController w,string s){
-	    _wappons.Add(s,w);
+    public void AddWeapon(WeaponController w){
+	    if (GetWeapon(w.GetName()) != null){
+		    _weapons.Remove(w.GetName());
+	    }
+	    _weapons.Add(w.GetName(),w);
+    }
+
+    public WeaponController GetWeapon(string name){
+	    if(_weapons.ContainsKey("name")){  
+		    return _weapons["name"];
+	    }else {
+		    return null;
+	    }
     }
 
     public static int GetLevel() {
@@ -115,6 +134,23 @@ public class PlayerController : MonoBehaviour{
 
     public void AddRugh(int amount) {
 	    _rugh += amount;
+    }
+
+    public void UseItem(Item i,WeaponController wc){
+	    switch (i)
+	    {
+		    case Item.HealingPotion:
+			    _health = _maxHealth;
+			    break;
+		    case Item.AmmoBox:
+			    if (wc!=null)
+				    wc.Refill();
+			    break;
+		    case Item.RepairKit:
+			    if (wc!=null)
+				    wc.Repair();
+			    break;
+	    }
     }
 
     public bool Purchasable(string upgrade,bool purchase){
