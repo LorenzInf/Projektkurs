@@ -30,8 +30,8 @@ public class EnemyController : MonoBehaviour
         time += Time.deltaTime;
         if (time >= 10.0f){
             GameObject go=GameObject.Find("Main Camera");
-            if (go != null)
-                (go.GetComponent("FightHandler") as FightHandler).StartAttack(level);
+            //if (go != null)
+                //(go.GetComponent("FightHandler") as FightHandler).StartAttack(level);
             time = 0f;
         }
     }

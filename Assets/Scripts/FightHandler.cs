@@ -11,28 +11,28 @@ public class FightHandler : MonoBehaviour{
 	public GameObject player;
 	
 	private GameObject current;
-	private Attack currentAttack=null;
 
 	public void Awake(){
-		SetUpFight(FightConfig.IsBoss());
-
-		EndFight();
+		SetUpFight();
 	}
 
-	public void Update(){
-		if(currentAttack!=null){
-			currentAttack.time+=Time.deltaTime;
-			if(currentAttack.time>=10-0.2*currentAttack.level)
-				EndAttack();
-		}
-	}
-    
-    public void SetUpFight(bool boss){
-        
+	public void SetUpFight(){
+	    if(FightConfig.IsBoss())
+	    {
+		    current = Instantiate(boss);
+	    }else{
+		    current = Instantiate(enemy);
+	    }
     }
 
     public void HandleInput(string s){
-        
+	    s = s.ToLower();
+	    switch (s)
+	    {
+		    case "win":
+			    EndFight();
+			    break;
+	    }
     }
 
 	public void EndFight(){
@@ -40,24 +40,6 @@ public class FightHandler : MonoBehaviour{
 			SceneManager.LoadScene("Hub");
 		}else{
 			SceneManager.LoadScene("Level");
-		}
-	}
-
-	public void StartAttack(int lvl){
-		currentAttack=new Attack(lvl);
-	}
-
-	public void EndAttack(){
-		currentAttack=null;
-	}
-
-	public class Attack{
-		public bool blocked=false;
-		public int level;
-		public float time=0;
-
-		public Attack(int lvl){
-			level=lvl;
 		}
 	}
 }

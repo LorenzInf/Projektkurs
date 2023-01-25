@@ -74,9 +74,9 @@ public class LevelController : MonoBehaviour{
 		currentRoom.Clear();
 		bool b = room.Visited(false);
 		string s = room.ToString();
-		if(s.Contains("Boss")&&b){
+		if(s.Contains("Boss")&&!b){
 			CreateFight(true);
-		}else if(s.Contains("Enemy")&&b){
+		}else if(s.Contains("Enemy")&&!b){
 			CreateFight(false);
 		}else{
 			currentRoom.Add(Instantiate(emptyroomPrefab));

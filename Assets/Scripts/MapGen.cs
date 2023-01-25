@@ -130,7 +130,7 @@ public class MapGen{
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
 
-		private List<ItemController> items;
+		private List<PlayerController.Item> items;
 		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
@@ -144,11 +144,11 @@ public class MapGen{
 			}
         }
 
-        public List<ItemController> GetItems(){
+        public List<PlayerController.Item> GetItems(){
             return items;
         }
 
-        public List<ItemController> TakeItems(){
+        public List<PlayerController.Item> TakeItems(){
             var itemsList = items;
             items = null;
             return itemsList;

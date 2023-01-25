@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class ItemController : MonoBehaviour {
-
+public class WapponController : MonoBehaviour{
+    
     public string itemname;
     public bool usesAmmo;
     public int ammo;
@@ -21,11 +19,9 @@ public class ItemController : MonoBehaviour {
             if (usesAmmo)
                 ammo--;
             _currentDurability--;
-            if(_currentDurability==0)
-                Destroy(this);
-        }else{
-            Destroy(this);
         }
+        if(_currentDurability==0)
+            Destroy(this);
     }
 
     public bool CanBeUsed(){

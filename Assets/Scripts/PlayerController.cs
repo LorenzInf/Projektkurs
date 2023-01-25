@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour{
+	
+	public enum Item {
+		AmmoBox,
+		HealingPotion
+	}
     
-    private static ArrayList _items=new ArrayList();
-    private static ItemController _inHand=null;
+    private static List<Item> _items=new List<Item>();
+    private static Dictionary<string, WapponController> _wappons = new Dictionary<string,WapponController>();
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
-    
-	private bool left=false;
+    private static int _rugh = 0;
+
+    private bool left=false;
 
     public GameObject player;
     public LevelController level=null;
 	public bool canMove;
-
-    public void Start(){
-        _items = new ArrayList();
-        
-    }
 
     public void Update(){
 		if(canMove)
@@ -29,13 +30,13 @@ public class PlayerController : MonoBehaviour{
 
     public void HandleMovement(){
 		float x=0.0f,y=0.0f;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.DownArrow))
             y-=3;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
         	x-=3;
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.UpArrow))
             y+=3;
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.RightArrow))
             x+=3;
 		if(left==x>0&&x!=0.0f){
 			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
@@ -76,8 +77,7 @@ public class PlayerController : MonoBehaviour{
 		return MapGen.Dir.Null;
 	}
 
-	private void ValidatePosition()
-	{
+	private void ValidatePosition() {
 		Vector3 v=gameObject.transform.position;
 		if (v.x<-9.4){
 			gameObject.transform.position = new Vector3(-9.39f,v.y,v.z);
@@ -101,18 +101,35 @@ public class PlayerController : MonoBehaviour{
         _health = _maxHealth;
     }
 
-    public void AddItem(ItemController i){
+    public void AddItem(Item i){
         _items.Add(i);
     }
-
-    public void SelectItem(string name){
-        foreach (var item in _items){
-            
-        }
+    
+    public void AddWappon(WapponController w,string s){
+	    _wappons.Add(s,w);
     }
 
-    public static int GetLevel()
-    {
+    public static int GetLevel() {
         return (int)(_level);
+    }
+
+    public void AddRugh(int amount) {
+	    _rugh += amount;
+    }
+
+    public bool Purchasable(string upgrade,bool purchase){
+	    bool purchaseable = false;
+	    switch (upgrade){
+		    case "health":
+			    purchaseable = ((_maxHealth - 100) / 100) < 3;
+			    if (purchaseable)
+				    purchaseable = _rugh >= ((_health - 100) / 100) * 5;
+			    if (purchase && purchaseable){
+				    _rugh -= (int)(((_maxHealth - 100) / 100) * 5);
+				    _maxHealth += 100;
+			    }
+			    break;
+	    }
+	    return purchaseable;
     }
 }
