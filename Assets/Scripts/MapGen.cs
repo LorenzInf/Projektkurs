@@ -131,7 +131,7 @@ public class MapGen{
         public readonly List<Dir> Dirs;
 
 		private PlayerController.Item item=PlayerController.Item.Null;
-		private WeaponController weapon=null;
+		private string weapon=null;
 		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
@@ -139,7 +139,7 @@ public class MapGen{
             Dirs = dirs;
 			visited=false;
 			if(type==RoomType.Loot){
-				GenerateLoot();
+				while(!GenerateLoot()){}
 			}
         }
 
@@ -156,9 +156,9 @@ public class MapGen{
         }
 
 		public WeaponController TakeWeapon(){
-            var weaponVar = weapon;
-            weapon = null;
-            return weaponVar;
+            //var weaponVar = weapon;
+            //weapon = null;
+            return new WeaponController("",false,0,0);
         }
 
         public bool Visited(bool b){
@@ -168,21 +168,77 @@ public class MapGen{
 			return visited;
 		}
 
-		private void GenerateLoot(){
+		private bool GenerateLoot(){
 			Random rnd = new Random();
         	double r=rnd.Next(0,1);
 			if(r<0.5){
 				r=rnd.Next(0,3);
 				if(r<1){
-					item=PlayerController.Item.AmmoBox;
+					if (Config.ItemAvailable(0)){
+						item=PlayerController.Item.AmmoBox;
+						return true;
+					}
 				}else if(r>2){
-					item=PlayerController.Item.RepairKit;
+					if (Config.ItemAvailable(0)){
+						item=PlayerController.Item.RepairKit;
+						return true;
+					}
 				}else{
-					item=PlayerController.Item.HealingPotion;
+					if (Config.ItemAvailable(0)){
+						item=PlayerController.Item.HealingPotion;
+						return true;
+					}
 				}
 			}else if(r>0.5){
-				
+				r=rnd.Next(0,8);
+				if(r<1){
+					if (Config.WeaponAvailable(0)){
+						
+						return true;
+					}
+				}else if(r<2){
+					if (Config.WeaponAvailable(1)){
+						
+						return true;
+					}
+				}else if(r<3){
+					if (Config.WeaponAvailable(2)){
+						
+						return true;
+					}
+				}else if(r<4){
+					if (Config.WeaponAvailable(3)){
+						
+						return true;
+					}
+				}else if(r<5){
+					if (Config.WeaponAvailable(4)){
+						
+						return true;
+					}
+				}else if(r<6){
+					if (Config.WeaponAvailable(5)){
+						
+						return true;
+					}
+				}else if(r<7){
+					if (Config.WeaponAvailable(6)){
+						
+						return true;
+					}
+				}else if(r<8){
+					if (Config.WeaponAvailable(7)){
+						
+						return true;
+					}
+				}else{
+					if (Config.WeaponAvailable(8)){
+						
+						return true;
+					}
+				}
 			}
+			return false;
 		}
         
         public override string ToString() { 

@@ -99,9 +99,10 @@ public class PlayerController : MonoBehaviour{
 		_items=new List<Item>();
 		_weapons = new Dictionary<string,WeaponController>();
 		AddWeapon(WeaponController.CreateNewWeapon("Branch","Branch"));
+		Heal();
 	}
 
-    public void TakeDamage(int amount) {
+    public void TakeDamage(double amount) {
         _health -= amount;
     }
 
@@ -132,21 +133,27 @@ public class PlayerController : MonoBehaviour{
         return (int)(_level);
     }
 
+    public void LevelUp(double amount){
+	    _level += amount / (_level/2);
+    }
+
     public void AddRugh(int amount) {
 	    _rugh += amount;
     }
 
-    public void UseItem(Item i,WeaponController wc){
-	    switch (i)
-	    {
-		    case Item.HealingPotion:
+    public int GetRugh(){
+	    return _rugh;
+    }
+    public void UseItem(string item,WeaponController wc){
+	    switch (item) {
+		    case "healingpotion":
 			    _health = _maxHealth;
 			    break;
-		    case Item.AmmoBox:
+		    case "ammobox":
 			    if (wc!=null)
 				    wc.Refill();
 			    break;
-		    case Item.RepairKit:
+		    case "repairkit":
 			    if (wc!=null)
 				    wc.Repair();
 			    break;

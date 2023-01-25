@@ -21,8 +21,9 @@ public class LevelController : MonoBehaviour{
 
 	void Start(){
 		player=GameObject.Find("Player");
-		if (r == null){
-			SetUpLevel(5, 5, 5);
+		if (r == null) {
+			int i = PlayerController.GetLevel() + 4;
+			SetUpLevel(i, i, i);
 			(player.GetComponent("PlayerController") as PlayerController).Reset();
 		}
 
