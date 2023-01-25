@@ -138,7 +138,7 @@ public class MapGen{
             Dirs = dirs;
 			visited=false;
 			if(type==RoomType.Loot){
-				items=null;
+				items=new List<PlayerController.Item>();
 			}else{
 				items=null;
 			}
