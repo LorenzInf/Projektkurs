@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour{
 	public enum Item {
 		AmmoBox,
 		HealingPotion,
-		RepairKit
+		RepairKit,
+		Null
 	}
     
     private static List<Item> _items=new List<Item>();
@@ -94,6 +95,12 @@ public class PlayerController : MonoBehaviour{
 		}
 	}
 
+	public void Reset(){
+		_items=new List<Item>();
+		_weapons = new Dictionary<string,WeaponController>();
+		AddWeapon(WeaponController.CreateNewWeapon("Branch","Branch"));
+	}
+
     public void TakeDamage(int amount) {
         _health -= amount;
     }
@@ -106,7 +113,7 @@ public class PlayerController : MonoBehaviour{
         _items.Add(i);
     }
     
-    public void AddWappon(WeaponController w){
+    public void AddWeapon(WeaponController w){
 	    if (GetWeapon(w.GetName()) != null){
 		    _weapons.Remove(w.GetName());
 	    }

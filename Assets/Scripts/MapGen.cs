@@ -130,7 +130,8 @@ public class MapGen{
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
 
-		private List<PlayerController.Item> items;
+		private PlayerController.Item item;
+		private WeaponController weapon;
 		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
@@ -138,20 +139,29 @@ public class MapGen{
             Dirs = dirs;
 			visited=false;
 			if(type==RoomType.Loot){
-				items=new List<PlayerController.Item>();
+				GenerateLoot();
 			}else{
-				items=null;
+				item=PlayerController.Item.Null;
+				weapon=null;
 			}
         }
 
-        public List<PlayerController.Item> GetItems(){
-            return items;
+        public string GetLoot(){
+            if(item!=PlayerController.Item.Null) return "item";
+			if(weapon!=null) return "weapon";
+			return "null";
         }
 
-        public List<PlayerController.Item> TakeItems(){
-            var itemsList = items;
-            items = null;
-            return itemsList;
+        public PlayerController.Item TakeItem(){
+            var itemVar = item;
+            item = PlayerController.Item.Null;
+            return itemVar;
+        }
+
+		public WeaponController TakeWeapon(){
+            var weaponVar = weapon;
+            weapon = null;
+            return weaponVar;
         }
 
         public bool Visited(bool b){
@@ -159,6 +169,10 @@ public class MapGen{
 				visited=true;
 			}
 			return visited;
+		}
+
+		private void GenerateLoot(){
+			
 		}
         
         public override string ToString() { 
