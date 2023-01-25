@@ -11,14 +11,15 @@ public class FightHandler : MonoBehaviour{
 	public GameObject player;
 	
 	private GameObject current;
+	private bool bossFight;
 
 	public void Awake(){
 		SetUpFight();
 	}
 
 	public void SetUpFight(){
-	    if(FightConfig.IsBoss())
-	    {
+		bossFight=FightConfig.IsBoss();
+	    if(bossFight){
 		    current = Instantiate(boss);
 	    }else{
 		    current = Instantiate(enemy);
@@ -27,23 +28,29 @@ public class FightHandler : MonoBehaviour{
 
     public void HandleInput(string s){
 	    s = s.ToLower();
-
-	    var w = PlayerController.GetWeapon(s);
+	    var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
 	    if (w != null) {
-		    if (w.CanBeUsed()) {
-			    double value = w.Use();
-			    // ???
-		    } else {
-			    // ???
-		    }
+		    double damage = w.Use();
+			if(bossFight){
+				(boss.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
+			}else{
+				(enemy.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
+			}
 	    } else {
-		    // auf xaver warten
+			string[] st=s.Split(' ');
+			w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
+			if(w!=null)
+				(player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
 	    }
-	    
     }
 
+	public void AttackPlayer(double damage){
+		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
+	}
+
 	public void EndFight(){
-		if(FightConfig.IsBoss()){
+		if(bossFight){
+			
 			SceneManager.LoadScene("Hub");
 		}else{
 			SceneManager.LoadScene("Level");

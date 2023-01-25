@@ -690,7 +690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d50b9c57fb3d274b86ad897ab6c2391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boss: {fileID: 0}
+  boss: {fileID: 2594573068221982007, guid: c58f71b5543bf1b4cbff732239f59efa, type: 3}
   enemy: {fileID: 8108923090119580052, guid: 3e19ec60ddc684742b81a9cafb86c312, type: 3}
   player: {fileID: 1808277594}
 --- !u!1 &857635584
