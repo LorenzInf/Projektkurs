@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour{
 	}
     
     private static List<Item> _items=new List<Item>();
-    private static Dictionary<string, WapponController> _wappons = new Dictionary<string,WapponController>();
+    private static Dictionary<string, WeaponController> _wappons = new Dictionary<string,WeaponController>();
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour{
         _items.Add(i);
     }
     
-    public void AddWappon(WapponController w,string s){
+    public void AddWappon(WeaponController w,string s){
 	    _wappons.Add(s,w);
     }
 
