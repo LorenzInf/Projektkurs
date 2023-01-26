@@ -170,15 +170,16 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public void AttackPlayer(double damage){
+		Debug.Log((player.GetComponent("PlayerController") as PlayerController).Lifes());
 		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
-		if(!(currentEnemy.GetComponent("EnemyController") as EnemyController).Lifes()){
+		if(!(player.GetComponent("PlayerController") as PlayerController).Lifes()){
 			EndFight();
 		}
 	}
 
 	public void AttackEnemy(double damage){
-		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
-		if(!(player.GetComponent("PlayerController") as PlayerController).Lifes()){
+		(currentEnemy.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
+		if(!(currentEnemy.GetComponent("EnemyController") as EnemyController).Lifes()){
 			EndFight();
 		}
 	}
@@ -192,12 +193,12 @@ public class LevelController : MonoBehaviour{
 	}
 
 	private void EndFight(){
-		bool bossFight=currentEnemy.name.Contains("boss");
-		if(bossFight){
+		if(r[cx,cy].ToString().Contains("Boss")){
 			PlayerController.AddRugh(PlayerController.GetLevel());
 			PlayerController.LevelUp();
 			SceneManager.LoadScene("Hub");
 		}else{
+			Destroy(currentEnemy);
 			PlayerController.AddRugh(PlayerController.GetLevel()/5);
 		}
 	}
