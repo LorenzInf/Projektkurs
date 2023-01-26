@@ -40,6 +40,11 @@ public class Hub : MonoBehaviour
                     SceneManager.LoadScene("Level");
                     curInput = "";
                 }
+                
+                if (el.Key.Equals("Shop")) {
+                    SceneManager.LoadScene("Shop");
+                    curInput = "";
+                }
             }
             if (el.Key.ToLower().StartsWith(curInput.ToLower())) {
                 any = true;
@@ -52,6 +57,6 @@ public class Hub : MonoBehaviour
     }
 
     string AtIndex (string s, int idx) {
-        return $"<color=\"yellow\">{s.Substring(0, idx)}<color=\"black\">{s.Substring(idx)}";
+        return $"<#d4af37>{s.Substring(0, idx)}</color>{s.Substring(idx)}";
     }
 }

@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour{
 	    _rugh += amount;
     }
 
-    public int GetRugh(){
+    public static int GetRugh(){
 	    return _rugh;
     }
     public void UseItem(string item,WeaponController wc){
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour{
 	    }
     }
 
-    public bool Purchasable(string upgrade,bool purchase){
+    public static bool Purchasable(string upgrade,bool purchase){
 	    bool purchaseable = false;
 	    switch (upgrade){
 		    case "health":
