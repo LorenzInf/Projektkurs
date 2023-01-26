@@ -144,8 +144,7 @@ public class LevelController : MonoBehaviour{
 		s=s.ToLower();
 		var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
 	    if (w != null) {
-		    double damage = w.Use();
-			(currentEnemy.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
+		    AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w));
 	    } else {
 			string[] st=s.Split(' ');
 			w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
@@ -154,13 +153,15 @@ public class LevelController : MonoBehaviour{
 	    }
 	}
 
-	private void GetLoot() {
+	public void GetLoot() {
 		MapGen.Room room = r[cx, cy];
-		string s = room.GetLoot();
-		if (s.Contains("item")){
-			(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
-		}else if (s.Contains("weapon")){
-			(player.GetComponent("PlayerController") as PlayerController).AddWeapon(room.TakeWeapon());
+		if(room.ToString().Contains("Loot")){
+			string s = room.GetLoot();
+			if (s.Contains("item")){
+				(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
+			}else if (s.Contains("weapon")){
+				(player.GetComponent("PlayerController") as PlayerController).AddWeapon(WeaponController.CreateWeapon(room.TakeWeapon()));
+			}
 		}
 	}
 

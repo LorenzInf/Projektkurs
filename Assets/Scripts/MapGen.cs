@@ -130,115 +130,50 @@ public class MapGen{
         public readonly RoomType Type; 
         public readonly List<Dir> Dirs;
 
-		private PlayerController.Item item=PlayerController.Item.Null;
-		private string weapon=null;
+		private Config.Item item=Config.Item.Null;
+		private Config.Weapon weapon=Config.Weapon.Null;
 		private bool visited;
         
         public Room(RoomType type, List<Dir> dirs) { 
             Type = type; 
             Dirs = dirs;
 			visited=false;
-			if(type==RoomType.Loot){
-				//while(!GenerateLoot()){}
-			}
+			if(type==RoomType.Loot)
+				GenerateLoot();
         }
 
         public string GetLoot(){
-            if(item!=PlayerController.Item.Null) return "item";
-			if(weapon!=null) return "weapon";
+            if(item!=Config.Item.Null) return "item";
+			if(weapon!=Config.Weapon.Null) return "weapon";
 			return "null";
         }
 
-        public PlayerController.Item TakeItem(){
+        public Config.Item TakeItem(){
             var itemVar = item;
-            item = PlayerController.Item.Null;
+            item = Config.Item.Null;
             return itemVar;
         }
 
-		public WeaponController TakeWeapon(){
-            //var weaponVar = weapon;
-            //weapon = null;
-            return new WeaponController("",false,0,0);
+		public Config.Weapon TakeWeapon(){
+            var weaponVar = weapon;
+            weapon = Config.Weapon.Null;
+            return weaponVar;
         }
 
         public bool Visited(bool b){
-			if(b){
+			if(b)
 				visited=true;
-			}
 			return visited;
 		}
 
-		private bool GenerateLoot(){
+		private void GenerateLoot(){
 			Random rnd = new Random();
         	double r=rnd.Next(0,1);
 			if(r<0.5){
-				r=rnd.Next(0,3);
-				if(r<1){
-					if (Config.ItemAvailable(0)){
-						item=PlayerController.Item.AmmoBox;
-						return true;
-					}
-				}else if(r>2){
-					if (Config.ItemAvailable(0)){
-						item=PlayerController.Item.RepairKit;
-						return true;
-					}
-				}else{
-					if (Config.ItemAvailable(0)){
-						item=PlayerController.Item.HealingPotion;
-						return true;
-					}
-				}
+				item=Config.GetRandomItem();
 			}else if(r>0.5){
-				r=rnd.Next(0,8);
-				if(r<1){
-					if (Config.WeaponAvailable(0)){
-						
-						return true;
-					}
-				}else if(r<2){
-					if (Config.WeaponAvailable(1)){
-						
-						return true;
-					}
-				}else if(r<3){
-					if (Config.WeaponAvailable(2)){
-						
-						return true;
-					}
-				}else if(r<4){
-					if (Config.WeaponAvailable(3)){
-						
-						return true;
-					}
-				}else if(r<5){
-					if (Config.WeaponAvailable(4)){
-						
-						return true;
-					}
-				}else if(r<6){
-					if (Config.WeaponAvailable(5)){
-						
-						return true;
-					}
-				}else if(r<7){
-					if (Config.WeaponAvailable(6)){
-						
-						return true;
-					}
-				}else if(r<8){
-					if (Config.WeaponAvailable(7)){
-						
-						return true;
-					}
-				}else{
-					if (Config.WeaponAvailable(8)){
-						
-						return true;
-					}
-				}
+				weapon=Config.GetRandomWeapon();
 			}
-			return false;
 		}
         
         public override string ToString() { 
