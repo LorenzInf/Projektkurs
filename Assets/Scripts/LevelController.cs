@@ -22,7 +22,7 @@ public class LevelController : MonoBehaviour{
 	private int cx = -1,cy = -1;
 	private MapGen.Room[,] r = null;
 
-	void Start(){
+	void Start() {
 		int i = PlayerController.GetLevel() + 4;
 		SetUpLevel(i, i, i);
 		(player.GetComponent("PlayerController") as PlayerController).Reset();
@@ -56,8 +56,8 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public bool CanMove(MapGen.Dir dir){
-		if(currentEnemy!=null)
-			return false;
+		//if(currentEnemy!=null)
+		//	return false;
 		string s = r[cx,cy].ToString();
 		if(dir==MapGen.Dir.Up&&s.Contains("^")){
 			return true;
@@ -136,8 +136,6 @@ public class LevelController : MonoBehaviour{
 			}
 		}
 		room.Visited(true);
-		Debug.Log("x="+cx+" y="+cy);
-		Debug.Log(room.ToString());
 	}
 
 	public void HandleInput(string s) {
@@ -198,6 +196,7 @@ public class LevelController : MonoBehaviour{
 		if(bossFight){
 			PlayerController.AddRugh(PlayerController.GetLevel());
 			PlayerController.LevelUp();
+			SceneManager.LoadScene("Hub");
 		}else{
 			PlayerController.AddRugh(PlayerController.GetLevel()/5);
 		}
