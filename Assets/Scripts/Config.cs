@@ -55,7 +55,6 @@ public class Config : MonoBehaviour{
         int i = aItems.Count;
         if (i == 0)
             MakeAvailabel(Item.AmmoBox);
-        Debug.Log(i);
         i=(int)(Random.Range(0,i));
         return aItems[i];
     }
@@ -64,7 +63,6 @@ public class Config : MonoBehaviour{
         int i = aWeapons.Count;
         if (i == 0)
             MakeAvailabel(Weapon.Dagger);
-        Debug.Log(i);
         i=(int)(Random.Range(0,i));
         return aWeapons[i];
     }

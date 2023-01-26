@@ -50,8 +50,7 @@ public class EnemyController : MonoBehaviour {
         gameObject.transform.position += n * 2 * Time.deltaTime;
     }
 
-    public bool CanReach()
-    {
+    public bool CanReach() {
         Vector3 v = player.transform.position - gameObject.transform.position;
         return v.magnitude < 1;
     }
