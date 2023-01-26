@@ -129,7 +129,7 @@ public class LevelController : MonoBehaviour{
 		}
 		if (s.Contains("Loot")) {
 			s = room.GetLoot();
-			if (s.Contains("Null")){
+			if (s.Contains("null")){
 				currentRoom.Add(Instantiate(ChestOpenPrefab));
 			}else{
 				currentRoom.Add(Instantiate(ChestClosedPrefab));
@@ -161,8 +161,10 @@ public class LevelController : MonoBehaviour{
 		if(room.ToString().Contains("Loot")){
 			string s = room.GetLoot();
 			if (s.Contains("item")){
+				Debug.Log("item aufgehoben");
 				(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
 			}else if (s.Contains("weapon")){
+				Debug.Log("waffe aufgehoben");
 				(player.GetComponent("PlayerController") as PlayerController).AddWeapon(WeaponController.CreateWeapon(room.TakeWeapon()));
 			}
 			SetRoom();
