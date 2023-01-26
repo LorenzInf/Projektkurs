@@ -14,19 +14,18 @@ public class LevelController : MonoBehaviour{
 	public GameObject sideDoorClosedPrefab;
 	public GameObject ChestOpenPrefab;
 	public GameObject ChestClosedPrefab;
+	public GameObject enemy;
+	public GameObject boss;
 
-	private static List<GameObject> currentRoom = new List<GameObject>();
-	private static int cx = -1,cy = -1;
-	private static MapGen.Room[,] r = null;
+	private List<GameObject> currentRoom=new List<GameObject>();
+	private GameObject currentEnemy=null;
+	private int cx = -1,cy = -1;
+	private MapGen.Room[,] r = null;
 
 	void Start(){
-		player=GameObject.Find("Player");
-		if (r == null) {
-			int i = PlayerController.GetLevel() + 4;
-			SetUpLevel(i, i, i);
-			(player.GetComponent("PlayerController") as PlayerController).Reset();
-		}
-
+		int i = PlayerController.GetLevel() + 4;
+		SetUpLevel(i, i, i);
+		(player.GetComponent("PlayerController") as PlayerController).Reset();
 		SetRoom();
 	}
 
@@ -57,6 +56,8 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public bool CanMove(MapGen.Dir dir){
+		if(currentEnemy!=null)
+			return false;
 		string s = r[cx,cy].ToString();
 		if(dir==MapGen.Dir.Up&&s.Contains("^")){
 			return true;
@@ -82,57 +83,56 @@ public class LevelController : MonoBehaviour{
 			CreateFight(true);
 		}else if(s.Contains("Enemy")&&!b){
 			CreateFight(false);
-		}else{
-			currentRoom.Add(Instantiate(emptyroomPrefab));
-			bool open = false;
-			if(s.Contains("^")){
-				open = r[cx,cy-1].Visited(false);
-				if (open){
-					currentRoom.Add(Instantiate(doorOpenPrefab));
-				}else{
-					currentRoom.Add(Instantiate(doorClosedPrefab));
-				}
+		}
+		currentRoom.Add(Instantiate(emptyroomPrefab));
+		bool open = false;
+		if(s.Contains("^")){
+			open = r[cx,cy-1].Visited(false);
+			if (open){
+				currentRoom.Add(Instantiate(doorOpenPrefab));
+			}else{
+				currentRoom.Add(Instantiate(doorClosedPrefab));
 			}
-			if (s.Contains("v")){
-				open = r[cx,cy+1].Visited(false);
-				if(open){
-					GameObject go = Instantiate(doorOpenPrefab);
-					go.transform.position = new Vector3(0f,-3.7f,-1f);
-					currentRoom.Add(go);
-				}else{
-					GameObject go = Instantiate(doorClosedPrefab);
-					go.transform.position = new Vector3(0f,-3.7f,-1f);
-					currentRoom.Add(go);
-				}
+		}
+		if (s.Contains("v")){
+			open = r[cx,cy+1].Visited(false);
+			if(open){
+				GameObject go = Instantiate(doorOpenPrefab);
+				go.transform.position = new Vector3(0f,-3.7f,-1f);
+				currentRoom.Add(go);
+			}else{
+				GameObject go = Instantiate(doorClosedPrefab);
+				go.transform.position = new Vector3(0f,-3.7f,-1f);
+				currentRoom.Add(go);
 			}
-			if (s.Contains(">")){
-				open = r[cx+1,cy].Visited(false);
-				if(open){
-					currentRoom.Add(Instantiate(sideDoorOpenPrefab));
-				}else{
-					currentRoom.Add(Instantiate(sideDoorClosedPrefab));
-				}
+		}
+		if (s.Contains(">")){
+			open = r[cx+1,cy].Visited(false);
+			if(open){
+				currentRoom.Add(Instantiate(sideDoorOpenPrefab));
+			}else{
+				currentRoom.Add(Instantiate(sideDoorClosedPrefab));
 			}
-			if (s.Contains("<")){
-				open = r[cx-1,cy].Visited(false);
-				if(open){
-					GameObject go = Instantiate(sideDoorOpenPrefab);
-					go.transform.position = new Vector3(-9.8f,-0.3f,0f);
-					go.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
-					currentRoom.Add(go);
-				}else{
-					GameObject go = Instantiate(sideDoorClosedPrefab);
-					go.transform.position = new Vector3(-10.2f,0f,0f);
-					currentRoom.Add(go);
-				}
+		}
+		if (s.Contains("<")){
+			open = r[cx-1,cy].Visited(false);
+			if(open){
+				GameObject go = Instantiate(sideDoorOpenPrefab);
+				go.transform.position = new Vector3(-9.8f,-0.3f,0f);
+				go.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+				currentRoom.Add(go);
+			}else{
+				GameObject go = Instantiate(sideDoorClosedPrefab);
+				go.transform.position = new Vector3(-10.2f,0f,0f);
+				currentRoom.Add(go);
 			}
-			if (s.Contains("Loot")) {
-				s = room.GetLoot();
-				if (s.Contains("Null")){
-					currentRoom.Add(Instantiate(ChestOpenPrefab));
-				}else{
-					currentRoom.Add(Instantiate(ChestClosedPrefab));
-				}
+		}
+		if (s.Contains("Loot")) {
+			s = room.GetLoot();
+			if (s.Contains("Null")){
+				currentRoom.Add(Instantiate(ChestOpenPrefab));
+			}else{
+				currentRoom.Add(Instantiate(ChestClosedPrefab));
 			}
 		}
 		room.Visited(true);
@@ -141,28 +141,60 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public void HandleInput(string s) {
-		s = s.ToLower();
-		switch (s)
-		{
-			case "get loot":
-				GetLoot();
-				break;
-		}
+		s=s.ToLower();
+		var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
+	    if (w != null) {
+		    AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w));
+	    } else {
+			string[] st=s.Split(' ');
+			w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
+			if(w!=null)
+				(player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
+	    }
 	}
 
-	private void GetLoot() {
+	public void GetLoot() {
 		MapGen.Room room = r[cx, cy];
-		string s = room.GetLoot();
-		if (s.Contains("item")){
-			(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
-		}else if (s.Contains("weapon")){
-			(player.GetComponent("PlayerController") as PlayerController).AddWeapon(room.TakeWeapon());
+		if(room.ToString().Contains("Loot")){
+			string s = room.GetLoot();
+			if (s.Contains("item")){
+				(player.GetComponent("PlayerController") as PlayerController).AddItem(room.TakeItem());
+			}else if (s.Contains("weapon")){
+				(player.GetComponent("PlayerController") as PlayerController).AddWeapon(WeaponController.CreateWeapon(room.TakeWeapon()));
+			}
 		}
 	}
 
-	private void CreateFight(bool boss){
-		FightConfig.SetBoss(boss);
-		Destroy(gameObject);
-		SceneManager.LoadScene("Fight");
+	public void AttackPlayer(double damage){
+		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
+		if(!(currentEnemy.GetComponent("EnemyController") as EnemyController).Lifes()){
+			EndFight();
+		}
+	}
+
+	public void AttackEnemy(double damage){
+		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
+		if(!(player.GetComponent("PlayerController") as PlayerController).Lifes()){
+			EndFight();
+		}
+	}
+
+	private void CreateFight(bool bossFight){
+		if(bossFight){
+			currentEnemy=Instantiate(boss);
+		}else{
+			currentEnemy=Instantiate(enemy);
+		}
+	}
+
+	private void EndFight(){
+		bool bossFight=currentEnemy.name.Contains("boss");
+		if(bossFight){
+			PlayerController.AddRugh(PlayerController.GetLevel());
+			PlayerController.LevelUp(PlayerController.GetLevel());
+		}else{
+			PlayerController.AddRugh(PlayerController.GetLevel()/5);
+			PlayerController.LevelUp(PlayerController.GetLevel()/5);
+		}
 	}
 }

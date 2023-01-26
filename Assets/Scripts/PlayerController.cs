@@ -4,16 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour{
-	
-	public enum Item {
-		AmmoBox,
-		HealingPotion,
-		RepairKit,
-		Null
-	}
-    
-    private static List<Item> _items=new List<Item>();
+
+	private static List<Config.Item> _items=new List<Config.Item>();
     private static Dictionary<string, WeaponController> _weapons = new Dictionary<string,WeaponController>();
+    private static Config.Weapon last = Config.Weapon.Null;
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
@@ -33,13 +27,13 @@ public class PlayerController : MonoBehaviour{
     public void HandleMovement(){
 		float x=0.0f,y=0.0f;
         if (Input.GetKey(KeyCode.DownArrow))
-            y-=3;
+            y-=4;
         if (Input.GetKey(KeyCode.LeftArrow))
-        	x-=3;
+        	x-=4;
         if (Input.GetKey(KeyCode.UpArrow))
-            y+=3;
+            y+=4;
         if (Input.GetKey(KeyCode.RightArrow))
-            x+=3;
+            x+=4;
 		if(left==x>0&&x!=0.0f){
 			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			left=!left;
@@ -93,13 +87,24 @@ public class PlayerController : MonoBehaviour{
 		if (v.y>2.6){
 			gameObject.transform.position = new Vector3(v.x,2.59f,v.z);
 		}
+		if (v.y<1&&v.y>-1&&v.x<1&&v.x>-1){
+			level.GetLoot();
+		}
 	}
 
 	public void Reset(){
-		_items=new List<Item>();
+		_items=new List<Config.Item>();
 		_weapons = new Dictionary<string,WeaponController>();
-		AddWeapon(WeaponController.CreateNewWeapon("Branch","Branch"));
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Basballbat));
 		Heal();
+	}
+
+	public double Attack(WeaponController w) {
+		return w.Use();
+	}
+
+	public bool Lifes(){
+		return _health > 0;
 	}
 
     public void TakeDamage(double amount) {
@@ -110,15 +115,17 @@ public class PlayerController : MonoBehaviour{
         _health = _maxHealth;
     }
 
-    public void AddItem(Item i){
+    public void AddItem(Config.Item i){
         _items.Add(i);
     }
     
     public void AddWeapon(WeaponController w){
-	    if (GetWeapon(w.GetName()) != null){
-		    _weapons.Remove(w.GetName());
+	    if (w != null) {
+		    if (GetWeapon(w.GetName()) != null) {
+			    _weapons.Remove(w.GetName());
+		    }
+		    _weapons.Add(w.GetName(), w);
 	    }
-	    _weapons.Add(w.GetName(),w);
     }
 
     public WeaponController GetWeapon(string name){
@@ -133,7 +140,7 @@ public class PlayerController : MonoBehaviour{
         return (int)(_level);
     }
 
-    public void LevelUp(double amount){
+    public static void LevelUp(double amount){
 	    _level += amount / (_level/2);
     }
 

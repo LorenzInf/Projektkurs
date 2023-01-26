@@ -6,8 +6,8 @@ public class Config : MonoBehaviour{
     
     private static bool _soundOn = true;
     private static bool _musicOn = true;
-    private static bool[] items = { false, false, false };
-    private static bool[] weapons = { false, false, false, false, false, false, false, false, false };
+    private static List<Weapon> aWeapons = new List<Weapon>();
+    private static List<Item> aItems = new List<Item>();
 
     public bool GetSoundOn(){
         return _soundOn;
@@ -25,19 +25,66 @@ public class Config : MonoBehaviour{
         _musicOn = music;
     }
 
-    public static bool ItemAvailable(int i){
-        return items[i];
-    }
-
-    public static bool WeaponAvailable(int i) {
-        return weapons[i];
-    }
-
-    public static void MakeItemAvailable(int i) {
-        items[i] = true;
+    public static bool IsAvailabel(Item i){
+        foreach (Item VARIABLE in aItems){
+            if (VARIABLE.ToString() == i.ToString())
+                return true;
+        }
+        return false;
     }
     
-    public static void MakeWeaponAvailable(int i) {
-        weapons[i] = true;
+    public static bool IsAvailabel(Weapon w){
+        foreach (Weapon VARIABLE in aWeapons){
+            if (VARIABLE.ToString() == w.ToString())
+                return true;
+        }
+        return false;
+    }
+
+    public static void MakeAvailabel(Weapon w) {
+        if (!IsAvailabel(w))
+            aWeapons.Add(w);
+    }
+    
+    public static void MakeAvailabel(Item i) {
+        if (!IsAvailabel(i))
+            aItems.Add(i);
+    }
+
+    public static Item GetRandomItem(){
+        int i = aItems.Count;
+        if (i == 0)
+            MakeAvailabel(Item.AmmoBox);
+        Debug.Log(i);
+        i=(int)(Random.Range(0,i));
+        return aItems[i];
+    }
+
+    public static Weapon GetRandomWeapon(){
+        int i = aWeapons.Count;
+        if (i == 0)
+            MakeAvailabel(Weapon.Dagger);
+        Debug.Log(i);
+        i=(int)(Random.Range(0,i));
+        return aWeapons[i];
+    }
+    
+    public enum Item{
+        AmmoBox,
+        HealingPotion,
+        RepairKit,
+        Null
+    }
+    
+    public enum Weapon{
+        Basballbat,
+        Bow,
+        Dagger,
+        Sword,
+        Machete,
+        Pistol,
+        Spear,
+        Scythe,
+        Null
     }
 }
