@@ -50,9 +50,12 @@ public class FightHandler : MonoBehaviour{
 
 	public void EndFight(){
 		if(bossFight){
-			
+			(player.GetComponent("PlayerController") as PlayerController).AddRugh(PlayerController.GetLevel());
+			(player.GetComponent("PlayerController") as PlayerController).LevelUp(PlayerController.GetLevel());
 			SceneManager.LoadScene("Hub");
 		}else{
+			(player.GetComponent("PlayerController") as PlayerController).AddRugh(PlayerController.GetLevel()/5);
+			(player.GetComponent("PlayerController") as PlayerController).LevelUp(PlayerController.GetLevel()/5);
 			SceneManager.LoadScene("Level");
 		}
 	}

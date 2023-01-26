@@ -139,7 +139,7 @@ public class MapGen{
             Dirs = dirs;
 			visited=false;
 			if(type==RoomType.Loot){
-				while(!GenerateLoot()){}
+				//while(!GenerateLoot()){}
 			}
         }
 
