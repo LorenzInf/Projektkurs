@@ -144,12 +144,17 @@ public class LevelController : MonoBehaviour{
 		s=s.ToLower();
 		var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
 	    if (w != null) {
-		    AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w));
+			if(currentEnemy==null){
+				(player.GetComponent("PlayerController") as PlayerController).Attack(w,0);
+			}else{
+				Vector3 v = player.transform.position - currentEnemy.transform.position;
+				AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w,v.magnitude));
+			}
 	    } else {
-			string[] st=s.Split(' ');
-			w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
-			if(w!=null)
-				(player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
+			//string[] st=s.Split(' ');
+			//w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
+			//if(w!=null)
+			//	(player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
 	    }
 	}
 
@@ -162,6 +167,7 @@ public class LevelController : MonoBehaviour{
 			}else if (s.Contains("weapon")){
 				(player.GetComponent("PlayerController") as PlayerController).AddWeapon(WeaponController.CreateWeapon(room.TakeWeapon()));
 			}
+			SetRoom();
 		}
 	}
 
@@ -191,10 +197,9 @@ public class LevelController : MonoBehaviour{
 		bool bossFight=currentEnemy.name.Contains("boss");
 		if(bossFight){
 			PlayerController.AddRugh(PlayerController.GetLevel());
-			PlayerController.LevelUp(PlayerController.GetLevel());
+			PlayerController.LevelUp();
 		}else{
 			PlayerController.AddRugh(PlayerController.GetLevel()/5);
-			PlayerController.LevelUp(PlayerController.GetLevel()/5);
 		}
 	}
 }
