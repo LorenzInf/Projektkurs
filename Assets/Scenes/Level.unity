@@ -285,6 +285,8 @@ MonoBehaviour:
   sideDoorClosedPrefab: {fileID: 7989141169727026204, guid: 80776e2fad281f2428ad78b134d98d8f, type: 3}
   ChestOpenPrefab: {fileID: 5181872600465813203, guid: c104323d939cbc94da8b12eee4f4f9fd, type: 3}
   ChestClosedPrefab: {fileID: 8860459558551443666, guid: 982e3805c0d6a9c44bcd2657fd7b0cfb, type: 3}
+  enemy: {fileID: 8108923090119580052, guid: 3e19ec60ddc684742b81a9cafb86c312, type: 3}
+  boss: {fileID: 2594573068221982007, guid: c58f71b5543bf1b4cbff732239f59efa, type: 3}
 --- !u!1 &670582325
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,13 +33,13 @@ public class PlayerController : MonoBehaviour{
     public void HandleMovement(){
 		float x=0.0f,y=0.0f;
         if (Input.GetKey(KeyCode.DownArrow))
-            y-=3;
+            y-=4;
         if (Input.GetKey(KeyCode.LeftArrow))
-        	x-=3;
+        	x-=4;
         if (Input.GetKey(KeyCode.UpArrow))
-            y+=3;
+            y+=4;
         if (Input.GetKey(KeyCode.RightArrow))
-            x+=3;
+            x+=4;
 		if(left==x>0&&x!=0.0f){
 			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			left=!left;
@@ -102,6 +102,10 @@ public class PlayerController : MonoBehaviour{
 		Heal();
 	}
 
+	public bool Lifes(){
+		return _health > 0;
+	}
+
     public void TakeDamage(double amount) {
         _health -= amount;
     }
@@ -133,11 +137,11 @@ public class PlayerController : MonoBehaviour{
         return (int)(_level);
     }
 
-    public void LevelUp(double amount){
+    public static void LevelUp(double amount){
 	    _level += amount / (_level/2);
     }
 
-    public void AddRugh(int amount) {
+    public static void AddRugh(int amount) {
 	    _rugh += amount;
     }
 
