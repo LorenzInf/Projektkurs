@@ -99,6 +99,10 @@ public class PlayerController : MonoBehaviour{
 		Heal();
 	}
 
+	public static double GetMaxHealth() {
+		return _maxHealth;
+	}
+	
 	public double Attack(WeaponController w) {
 		return w.Use();
 	}
