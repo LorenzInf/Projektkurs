@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine;
 
 public class MapGen{
 
@@ -167,11 +168,11 @@ public class MapGen{
 		}
 
 		private void GenerateLoot(){
-			Random rnd = new Random();
-        	double r=rnd.Next(0,1);
-			if(r<0.5){
+			System.Random random=new System.Random();
+        	double r=random.Next(0,10);
+			if(r<5){
 				item=Config.GetRandomItem();
-			}else if(r>0.5){
+			}else if(r>5){
 				weapon=Config.GetRandomWeapon();
 			}
 		}
