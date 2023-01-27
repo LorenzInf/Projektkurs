@@ -14,11 +14,16 @@ public class PlayerController : MonoBehaviour{
 
     private bool left=false;
     private GameObject current=null;
+	private float scale;
 
     public GameObject player;
     public LevelController level=null;
 	public bool canMove;
 	public GameObject[] weapons;
+
+	public void Start(){
+		scale=Camera.main.orthographicSize / 5;
+	}
 
     public void Update(){
 		if(canMove)
@@ -28,13 +33,13 @@ public class PlayerController : MonoBehaviour{
     public void HandleMovement(){
 		float x=0.0f,y=0.0f;
         if (Input.GetKey(KeyCode.DownArrow))
-            y-=4;
+            y-=4*scale;
         if (Input.GetKey(KeyCode.LeftArrow))
-        	x-=4;
+        	x-=4*scale;
         if (Input.GetKey(KeyCode.UpArrow))
-            y+=4;
+            y+=4*scale;
         if (Input.GetKey(KeyCode.RightArrow))
-            x+=4;
+            x+=4*scale;
 		if(left==x>0&&x!=0.0f){
 			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			if(current!=null)
@@ -53,25 +58,25 @@ public class PlayerController : MonoBehaviour{
 	private MapGen.Dir MovedToDoor(){
 		Vector3 v=gameObject.transform.position;
 		if (level == null) return MapGen.Dir.Null;
-		if(v.y<2.5&&v.y>-2.5&&v.x>-9.3&&v.x<9.3) return MapGen.Dir.Null;
-		if((v.y>2.5)&&v.x<1&&v.x>-1){
+		if(v.y<2.5*scale&&v.y>-2.5*scale&&v.x>-9.3*scale&&v.x<9.3*scale) return MapGen.Dir.Null;
+		if((v.y>2.5*scale)&&v.x<1*scale&&v.x>-1*scale){
 			if (level.CanMove(MapGen.Dir.Up)){
-				gameObject.transform.position = new Vector3(v.x,-2.49f,v.z)*Time.deltaTime;
+				gameObject.transform.position = new Vector3(v.x,-2.49f*scale,v.z);
 				return MapGen.Dir.Up;
 			}
-		}else if((v.y<-2.5)&&v.x<1&&v.x>-1){
+		}else if((v.y<-2.5*scale)&&v.x<1*scale&&v.x>-1*scale){
 			if (level.CanMove(MapGen.Dir.Down)){
-				gameObject.transform.position = new Vector3(v.x, 2.49f, v.z) * Time.deltaTime;
+				gameObject.transform.position = new Vector3(v.x, 2.49f*scale, v.z);
 				return MapGen.Dir.Down;
 			}
-		}else if((v.x>9.3)&&v.y<1&&v.y>-1){
+		}else if((v.x>9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Right)){
-				gameObject.transform.position = new Vector3(9.29f, v.y, v.z) * Time.deltaTime;
+				gameObject.transform.position = new Vector3(9.29f*scale, v.y, v.z);
 				return MapGen.Dir.Right;
 			}
-		}else if((v.x<-9.3)&&v.y<1&&v.y>-1){
+		}else if((v.x<-9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Left)){
-				gameObject.transform.position = new Vector3(-9.29f, v.y, v.z) * Time.deltaTime;
+				gameObject.transform.position = new Vector3(-9.29f*scale, v.y, v.z);
 				return MapGen.Dir.Left;
 			}
 		}
@@ -80,19 +85,19 @@ public class PlayerController : MonoBehaviour{
 
 	private void ValidatePosition() {
 		Vector3 v=gameObject.transform.position;
-		if (v.x<-9.4){
-			gameObject.transform.position = new Vector3(-9.39f,v.y,v.z);
+		if (v.x<-9.4*scale){
+			gameObject.transform.position = new Vector3(-9.39f*scale,v.y,v.z);
 		}
-		if (v.x>9.4){
-			gameObject.transform.position = new Vector3(9.39f,v.y,v.z);
+		if (v.x>9.4*scale){
+			gameObject.transform.position = new Vector3(9.39f*scale,v.y,v.z);
 		}
-		if (v.y<-2.6){
-			gameObject.transform.position = new Vector3(v.x,-2.59f,v.z);
+		if (v.y<-2.6*scale){
+			gameObject.transform.position = new Vector3(v.x,-2.59f*scale,v.z);
 		}
-		if (v.y>2.6){
-			gameObject.transform.position = new Vector3(v.x,2.59f,v.z);
+		if (v.y>2.6*scale){
+			gameObject.transform.position = new Vector3(v.x,2.59f*scale,v.z);
 		}
-		if (v.y<1&&v.y>-1&&v.x<1&&v.x>-1) {
+		if (v.y<1*scale&&v.y>-1*scale&&v.x<1*scale&&v.x>-1*scale) {
 			level.GetLoot();
 		}
 	}

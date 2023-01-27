@@ -21,8 +21,10 @@ public class LevelController : MonoBehaviour{
 	private GameObject currentEnemy=null;
 	private int cx = -1,cy = -1;
 	private MapGen.Room[,] r = null;
+	private float scale;
 
 	void Start() {
+		scale=Camera.main.orthographicSize / 5;
 		int i = PlayerController.GetLevel() + 4;
 		SetUpLevel(i, i, i);
 		(player.GetComponent("PlayerController") as PlayerController).Reset();
@@ -98,11 +100,11 @@ public class LevelController : MonoBehaviour{
 			open = r[cx,cy+1].Visited(false);
 			if(open){
 				GameObject go = Instantiate(doorOpenPrefab);
-				go.transform.position = new Vector3(0f,-3.7f,-1f);
+				go.transform.position = new Vector3(0f,-3.7f*scale,-1f);
 				currentRoom.Add(go);
 			}else{
 				GameObject go = Instantiate(doorClosedPrefab);
-				go.transform.position = new Vector3(0f,-3.7f,-1f);
+				go.transform.position = new Vector3(0f,-3.7f*scale,-1f);
 				currentRoom.Add(go);
 			}
 		}
@@ -118,12 +120,12 @@ public class LevelController : MonoBehaviour{
 			open = r[cx-1,cy].Visited(false);
 			if(open){
 				GameObject go = Instantiate(sideDoorOpenPrefab);
-				go.transform.position = new Vector3(-9.8f,-0.3f,0f);
+				go.transform.position = new Vector3(-9.8f*scale,-0.3f*scale,0f);
 				go.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 				currentRoom.Add(go);
 			}else{
 				GameObject go = Instantiate(sideDoorClosedPrefab);
-				go.transform.position = new Vector3(-10.2f,0f,0f);
+				go.transform.position = new Vector3(-10.2f*scale,0f,0f);
 				currentRoom.Add(go);
 			}
 		}
