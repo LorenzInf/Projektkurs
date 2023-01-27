@@ -17,12 +17,14 @@ public class PlayerController : MonoBehaviour{
 	private float scale;
 
     public GameObject player;
+	public GameObject inventar;
     public LevelController level=null;
 	public bool canMove;
 	public GameObject[] weapons;
 
 	public void Start(){
 		scale=Camera.main.orthographicSize / 5;
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
 	}
 
     public void Update(){
@@ -71,12 +73,12 @@ public class PlayerController : MonoBehaviour{
 			}
 		}else if((v.x>9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Right)){
-				gameObject.transform.position = new Vector3(9.29f*scale, v.y, v.z);
+				gameObject.transform.position = new Vector3(-9.29f*scale, v.y, v.z);
 				return MapGen.Dir.Right;
 			}
 		}else if((v.x<-9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Left)){
-				gameObject.transform.position = new Vector3(-9.29f*scale, v.y, v.z);
+				gameObject.transform.position = new Vector3(9.29f*scale, v.y, v.z);
 				return MapGen.Dir.Left;
 			}
 		}
@@ -102,13 +104,6 @@ public class PlayerController : MonoBehaviour{
 		}
 	}
 
-	public void Reset(){
-		_items=new List<Config.Item>();
-		_weapons = new Dictionary<string,WeaponController>();
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Basballbat));
-		Heal();
-	}
-
 	public double Attack(WeaponController w,double dist) {
 		SetLastWeapon(w);
 		if(dist<w.GetRange())
@@ -129,6 +124,7 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void AddItem(Config.Item i){
+		(inventar.GetComponent("InventarController") as InventarController).MakeAvailabel(i);
         _items.Add(i);
     }
     
@@ -137,6 +133,7 @@ public class PlayerController : MonoBehaviour{
 		    if (GetWeapon(w.GetName()) != null) {
 			    _weapons.Remove(w.GetName());
 		    }
+			(inventar.GetComponent("InventarController") as InventarController).MakeAvailabel(w.GetType());
 		    _weapons.Add(w.GetName(), w);
 	    }
     }
@@ -199,9 +196,12 @@ public class PlayerController : MonoBehaviour{
     public void SetLastWeapon(WeaponController w) {
 	    string type = w.GetType().ToString().ToLower();
 	    foreach (var weapon in weapons) {
+			Debug.Log(weapon.name.ToLower());
 		    if (weapon.name.ToLower() == type) {
 			    Destroy(current);
 			    current = Instantiate(weapon);
+				if(left)
+					current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 		    }
 	    }
     }
