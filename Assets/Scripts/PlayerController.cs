@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour{
 	private float scale;
 
     public GameObject player;
+	public GameObject inventar;
     public LevelController level=null;
 	public bool canMove;
 	public GameObject[] weapons;
@@ -129,6 +130,7 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void AddItem(Config.Item i){
+		(inventar.GetComponent("InventarController") as InventarController).MakeAvailabel(i);
         _items.Add(i);
     }
     
@@ -137,6 +139,7 @@ public class PlayerController : MonoBehaviour{
 		    if (GetWeapon(w.GetName()) != null) {
 			    _weapons.Remove(w.GetName());
 		    }
+			(inventar.GetComponent("InventarController") as InventarController).MakeAvailabel(w.GetType());
 		    _weapons.Add(w.GetName(), w);
 	    }
     }
