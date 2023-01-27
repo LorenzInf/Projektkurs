@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour{
 	public void Reset(){
 		_items=new List<Config.Item>();
 		_weapons = new Dictionary<string,WeaponController>();
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Basballbat));
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
 		Heal();
 	}
 
