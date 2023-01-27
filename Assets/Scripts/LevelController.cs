@@ -151,10 +151,16 @@ public class LevelController : MonoBehaviour{
 				AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w,v.magnitude));
 			}
 	    } else {
-			//string[] st=s.Split(' ');
-			//w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
-			//if(w!=null)
-			//	(player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
+		    if (s == "healingpotion"){
+			    (player.GetComponent("PlayerController") as PlayerController).UseItem(s, null);
+		    }else{
+			    string[] st=s.Split(' ');
+			    if (st.Length > 1){
+				    w=(player.GetComponent("PlayerController") as PlayerController).GetWeapon(st[1]);
+				    if(w!=null)
+					    (player.GetComponent("PlayerController") as PlayerController).UseItem(st[0],w);
+			    }
+		    }
 	    }
 	}
 
@@ -189,10 +195,12 @@ public class LevelController : MonoBehaviour{
 	}
 
 	private void CreateFight(bool bossFight){
-		if(bossFight){
-			currentEnemy=Instantiate(boss);
-		}else{
-			currentEnemy=Instantiate(enemy);
+		if (currentEnemy == null){
+			if (bossFight){
+				currentEnemy = Instantiate(boss);
+			}else{
+				currentEnemy = Instantiate(enemy);
+			}
 		}
 	}
 
@@ -203,6 +211,7 @@ public class LevelController : MonoBehaviour{
 			SceneManager.LoadScene("Hub");
 		}else{
 			Destroy(currentEnemy);
+			currentEnemy = null;
 			PlayerController.AddRugh(PlayerController.GetLevel()/5);
 		}
 	}

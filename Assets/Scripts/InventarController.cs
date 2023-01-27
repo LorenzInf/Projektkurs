@@ -27,7 +27,7 @@ public class InventarController : MonoBehaviour
     {
         switch (weapon)
         {
-            case Config.Weapon.Basballbat:
+            case Config.Weapon.Baseballbat:
                 Instantiate(items[0]);
                 break;
             case Config.Weapon.Bow:
