@@ -6,18 +6,19 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour{
 
 	private static List<Config.Item> _items=new List<Config.Item>();
-    private static Dictionary<string, WeaponController> _weapons = new Dictionary<string,WeaponController>();
-    private static Config.Weapon last = Config.Weapon.Null;
+	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
     private static double _maxHealth=100;
     private static double _health=100;
     private static double _level=1;
     private static int _rugh = 0;
 
     private bool left=false;
+    private GameObject current=null;
 
     public GameObject player;
     public LevelController level=null;
 	public bool canMove;
+	public GameObject[] weapons;
 
     public void Update(){
 		if(canMove)
@@ -36,6 +37,8 @@ public class PlayerController : MonoBehaviour{
             x+=4;
 		if(left==x>0&&x!=0.0f){
 			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+			if(current!=null)
+				current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			left=!left;
 		}
 		gameObject.transform.position += new Vector3(x,y,0.0f)*Time.deltaTime;
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour{
 		if (dir != MapGen.Dir.Null)
 			level.Move(dir);
 		ValidatePosition();
+		if(current!=null)
+			current.transform.position = gameObject.transform.position;
     }
 
 	private MapGen.Dir MovedToDoor(){
@@ -87,7 +92,7 @@ public class PlayerController : MonoBehaviour{
 		if (v.y>2.6){
 			gameObject.transform.position = new Vector3(v.x,2.59f,v.z);
 		}
-		if (v.y<1&&v.y>-1&&v.x<1&&v.x>-1){
+		if (v.y<1&&v.y>-1&&v.x<1&&v.x>-1) {
 			level.GetLoot();
 		}
 	}
@@ -99,12 +104,11 @@ public class PlayerController : MonoBehaviour{
 		Heal();
 	}
 
-	public static double GetMaxHealth() {
-		return _maxHealth;
-	}
-	
-	public double Attack(WeaponController w) {
-		return w.Use();
+	public double Attack(WeaponController w,double dist) {
+		SetLastWeapon(w);
+		if(dist<w.GetRange())
+			return w.Use();
+		return 0;
 	}
 
 	public bool Lifes(){
@@ -133,8 +137,8 @@ public class PlayerController : MonoBehaviour{
     }
 
     public WeaponController GetWeapon(string name){
-	    if(_weapons.ContainsKey("name")){  
-		    return _weapons["name"];
+	    if (_weapons.ContainsKey(name)){
+		    return _weapons[name];
 	    }else {
 		    return null;
 	    }
@@ -144,8 +148,8 @@ public class PlayerController : MonoBehaviour{
         return (int)(_level);
     }
 
-    public static void LevelUp(double amount){
-	    _level += amount / (_level/2);
+    public static void LevelUp(){
+	    _level++;
     }
 
     public static void AddRugh(int amount) {
@@ -185,5 +189,19 @@ public class PlayerController : MonoBehaviour{
 			    break;
 	    }
 	    return purchaseable;
+    }
+
+    public void SetLastWeapon(WeaponController w) {
+	    string type = w.GetType().ToString().ToLower();
+	    foreach (var weapon in weapons) {
+		    if (weapon.name.ToLower() == type) {
+			    Destroy(current);
+			    current = Instantiate(weapon);
+		    }
+	    }
+    }
+
+    public static double GetMaxHealth() {
+	    return _maxHealth;
     }
 }
