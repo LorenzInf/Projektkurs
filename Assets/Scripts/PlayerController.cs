@@ -8,10 +8,11 @@ public class PlayerController : MonoBehaviour{
 	private static List<Config.Item> _items=new List<Config.Item>();
 	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
     private static double _maxHealth=100;
-    private static double _health=100;
+    public static double _health=100;
     private static double _level=1;
     private static int _rugh = 0;
-
+    private static bool _movementLocked = false;
+    
     private bool left=false;
     private GameObject current=null;
 	private float scale;
@@ -33,28 +34,31 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void HandleMovement(){
-		float x=0.0f,y=0.0f;
-        if (Input.GetKey(KeyCode.DownArrow))
-            y-=4*scale;
-        if (Input.GetKey(KeyCode.LeftArrow))
-        	x-=4*scale;
-        if (Input.GetKey(KeyCode.UpArrow))
-            y+=4*scale;
-        if (Input.GetKey(KeyCode.RightArrow))
-            x+=4*scale;
-		if(left==x>0&&x!=0.0f){
-			gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
-			if(current!=null)
-				current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
-			left=!left;
-		}
-		gameObject.transform.position += new Vector3(x,y,0.0f)*Time.deltaTime;
-		MapGen.Dir dir=MovedToDoor();
-		if (dir != MapGen.Dir.Null)
-			level.Move(dir);
-		ValidatePosition();
-		if(current!=null)
-			current.transform.position = gameObject.transform.position;
+	    if (!_movementLocked) {
+		    float x = 0.0f, y = 0.0f;
+		    if (Input.GetKey(KeyCode.DownArrow))
+			    y -= 6 * scale;
+		    if (Input.GetKey(KeyCode.LeftArrow))
+			    x -= 6 * scale;
+		    if (Input.GetKey(KeyCode.UpArrow))
+			    y += 6 * scale;
+		    if (Input.GetKey(KeyCode.RightArrow))
+			    x += 6 * scale;
+		    if (left == x > 0 && x != 0.0f) {
+			    gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+			    if (current != null)
+				    current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+			    left = !left;
+		    }
+
+		    gameObject.transform.position += new Vector3(x, y, 0.0f) * Time.deltaTime;
+		    MapGen.Dir dir = MovedToDoor();
+		    if (dir != MapGen.Dir.Null)
+			    level.Move(dir);
+		    ValidatePosition();
+		    if (current != null)
+			    current.transform.position = gameObject.transform.position;
+	    }
     }
 
 	private MapGen.Dir MovedToDoor(){
@@ -102,6 +106,13 @@ public class PlayerController : MonoBehaviour{
 		if (v.y<1*scale&&v.y>-1*scale&&v.x<1*scale&&v.x>-1*scale) {
 			level.GetLoot();
 		}
+	}
+
+	public void Reset(){
+		_items=new List<Config.Item>();
+		_weapons = new Dictionary<string,WeaponController>();
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
+		Heal();
 	}
 
 	public double Attack(WeaponController w,double dist) {
@@ -208,5 +219,13 @@ public class PlayerController : MonoBehaviour{
 
     public static double GetMaxHealth() {
 	    return _maxHealth;
+    }
+
+    public static double GetHealth() {
+	    return _health;
+    }
+
+    public static void MovementLocked(bool locked) {
+	    _movementLocked = locked;
     }
 }

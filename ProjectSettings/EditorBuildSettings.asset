@@ -8,9 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Scenes/Fight.unity
-    guid: eeff30aaf29c10f47a95042000876994
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Hub.unity
     guid: cd58c8a7684978a479074acc7d85d93b
@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Shop.unity
     guid: 4407dbde9c4ff504b84727a08eb196bc
+  - enabled: 1
+    path: Assets/Scenes/Fight.unity
+    guid: 64277ae7ae9d6d64b9b5acc821ff9f17
   m_configObjects: {}
