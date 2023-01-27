@@ -18,20 +18,61 @@ public class Shop : MonoBehaviour
     public TextMeshProUGUI itemsText;
 
     public TextMeshProUGUI upgrade1;
+	public TextMeshProUGUI upgrade2;
+	public TextMeshProUGUI upgrade3;
+    public TextMeshProUGUI hundredHealth1;
+    public TextMeshProUGUI hundredHealth2;
+    public TextMeshProUGUI hundredHealth3;
+	public GameObject soldOut1;
+	public GameObject soldOut2;
+	public GameObject soldOut3;
+	public GameObject locked1;
+	public GameObject locked2;
+	public int ownedHealthUps;
 
     Dictionary<string, TextMeshProUGUI> possible = new Dictionary<string,TextMeshProUGUI>();
     string curInput = "";
 
-    void Start()
-    {
+    void Start() {
         possible.Add("Back", backText);
         possible.Add("Health", healthText);
         possible.Add("Weapons", weaponsText);
         possible.Add("Items", itemsText);
-        //possible.Add("Upgrade 1", upgrade1);
 
         rughBalance.SetText($"{PlayerController.GetRugh()} R$");
-}
+		ownedHealthUps = (((int) PlayerController.GetMaxHealth() - 100) / 100);
+
+		if (ownedHealthUps > 0) {
+			upgrade1.SetText("<#808080>Upgrade");
+            hundredHealth1.SetText("<#808080>+100 Max Health");
+            soldOut1.SetActive(true);
+            if(ownedHealthUps == 1) {
+                upgrade3.SetText("<#808080>Upgrade");
+                hundredHealth3.SetText("<#808080>+100 Max Health");
+                locked2.SetActive(true);
+                possible.Add("Upgrade",upgrade2);
+            } else if (ownedHealthUps >= 2) {
+                upgrade2.SetText("<#808080>Upgrade");
+                hundredHealth2.SetText("<#808080>+100 Max Health");
+                soldOut2.SetActive(true);
+                if (ownedHealthUps == 3) {
+                    upgrade3.SetText("<#808080>Upgrade");
+                    hundredHealth3.SetText("<#808080>+100 Max Health");
+                    soldOut3.SetActive(true);
+                } else {
+                    possible.Add("Upgrade",upgrade3);
+                }
+            }
+		} else {
+            upgrade2.SetText("<#808080>Upgrade");
+            hundredHealth2.SetText("<#808080>+100 Max Health");
+            upgrade3.SetText("<#808080>Upgrade");
+            hundredHealth3.SetText("<#808080>+100 Max Health");
+            locked1.SetActive(true);
+            locked2.SetActive(true);
+            possible.Add("Upgrade",upgrade1);
+        }
+    }
 
     void Update () {
         foreach (char c in Input.inputString) {
@@ -78,15 +119,47 @@ public class Shop : MonoBehaviour
                         shelfText.SetActive(false);
                         subMenuOpen = true;
                     }
-                } /*else {
-                    if (el.Key.Equals("Upgrade 1")) {
-                        if (PlayerController.GetRugh() >= 5) {
-                            //things
-                        } else {
-                            upgrade1.SetText("Insufficient Balance");
+                } else {
+                    if (el.Key.Equals("Upgrade")) {
+                        if (ownedHealthUps == 0) {
+                            if (PlayerController.GetRugh() >= 5) {
+                                PlayerController.AddRugh(-5);
+                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                                PlayerController.Purchasable("health",true);
+                                upgrade1.SetText("<#808080>Upgrade");
+                                hundredHealth1.SetText("<#808080>+100 Max Health");
+                                soldOut1.SetActive(true);
+                                ownedHealthUps = -1;
+                            } else {
+                                hundredHealth1.SetText("Insufficient Balance");
+                            }
+                        } else if (ownedHealthUps == 1) {
+                            if (PlayerController.GetRugh() >= 10) {
+                                PlayerController.AddRugh(-10);
+                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                                PlayerController.Purchasable("health",true);
+                                upgrade2.SetText("<#808080>Upgrade");
+                                hundredHealth2.SetText("<#808080>+100 Max Health");
+                                soldOut2.SetActive(true);
+                                ownedHealthUps = -1;
+                            } else {
+                                hundredHealth2.SetText("Insufficient Balance");
+                            }
+                        } else if (ownedHealthUps == 2) {
+                            if (PlayerController.GetRugh() >= 15) {
+                                PlayerController.AddRugh(-15);
+                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                                PlayerController.Purchasable("health",true);
+                                upgrade2.SetText("<#808080>Upgrade");
+                                hundredHealth2.SetText("<#808080>+100 Max Health");
+                                soldOut2.SetActive(true);
+                                ownedHealthUps = -1;
+                            } else {
+                                hundredHealth3.SetText("Insufficient Balance");
+                            }
                         }
                     }
-                }*/
+                }
                 curInput = "";
             }
             if (el.Key.ToLower().StartsWith(curInput.ToLower())) {

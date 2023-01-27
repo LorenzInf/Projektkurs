@@ -200,4 +200,8 @@ public class PlayerController : MonoBehaviour{
 		    }
 	    }
     }
+
+    public static double GetMaxHealth() {
+	    return _maxHealth;
+    }
 }
