@@ -74,8 +74,8 @@ public class LevelController : MonoBehaviour{
 
 	private void SetRoom(){
 		MapGen.Room room = r[cx,cy];
-		foreach (GameObject go in currentRoom){
-			Destroy(go);
+		foreach (GameObject gameObject in currentRoom){
+			Destroy(gameObject);
 		}
 		currentRoom.Clear();
 		bool b = room.Visited(false);
@@ -85,24 +85,30 @@ public class LevelController : MonoBehaviour{
 		}else if(s.Contains("Enemy")&&!b){
 			CreateFight(false);
 		}
-		currentRoom.Add(Instantiate(emptyroomPrefab));
+		GameObject go = Instantiate(emptyroomPrefab);
+		go.transform.position *= scale;
+		currentRoom.Add(go);
 		bool open = false;
 		if(s.Contains("^")){
 			open = r[cx,cy-1].Visited(false);
 			if (open){
-				currentRoom.Add(Instantiate(doorOpenPrefab));
+				go = Instantiate(doorOpenPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}else{
-				currentRoom.Add(Instantiate(doorClosedPrefab));
+				go = Instantiate(doorClosedPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}
 		}
 		if (s.Contains("v")){
 			open = r[cx,cy+1].Visited(false);
 			if(open){
-				GameObject go = Instantiate(doorOpenPrefab);
+				go = Instantiate(doorOpenPrefab);
 				go.transform.position = new Vector3(0f,-3.7f*scale,-1f);
 				currentRoom.Add(go);
 			}else{
-				GameObject go = Instantiate(doorClosedPrefab);
+				go = Instantiate(doorClosedPrefab);
 				go.transform.position = new Vector3(0f,-3.7f*scale,-1f);
 				currentRoom.Add(go);
 			}
@@ -110,20 +116,24 @@ public class LevelController : MonoBehaviour{
 		if (s.Contains(">")){
 			open = r[cx+1,cy].Visited(false);
 			if(open){
-				currentRoom.Add(Instantiate(sideDoorOpenPrefab));
+				go = Instantiate(sideDoorOpenPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}else{
-				currentRoom.Add(Instantiate(sideDoorClosedPrefab));
+				go = Instantiate(sideDoorClosedPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}
 		}
 		if (s.Contains("<")){
 			open = r[cx-1,cy].Visited(false);
 			if(open){
-				GameObject go = Instantiate(sideDoorOpenPrefab);
+				go = Instantiate(sideDoorOpenPrefab);
 				go.transform.position = new Vector3(-9.8f*scale,-0.3f*scale,0f);
 				go.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 				currentRoom.Add(go);
 			}else{
-				GameObject go = Instantiate(sideDoorClosedPrefab);
+				go = Instantiate(sideDoorClosedPrefab);
 				go.transform.position = new Vector3(-10.2f*scale,0f,0f);
 				currentRoom.Add(go);
 			}
@@ -131,9 +141,13 @@ public class LevelController : MonoBehaviour{
 		if (s.Contains("Loot")) {
 			s = room.GetLoot();
 			if (s.Contains("null")){
-				currentRoom.Add(Instantiate(ChestOpenPrefab));
+				go = Instantiate(ChestOpenPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}else{
-				currentRoom.Add(Instantiate(ChestClosedPrefab));
+				go = Instantiate(ChestClosedPrefab);
+				go.transform.position *= scale;
+				currentRoom.Add(go);
 			}
 		}
 		room.Visited(true);
