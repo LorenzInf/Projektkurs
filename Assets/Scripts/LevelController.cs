@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour{
-
+	public GameObject things;
     public GameObject player;
 	public GameObject emptyroomPrefab;
 	public GameObject doorOpenPrefab;
@@ -79,11 +79,6 @@ public class LevelController : MonoBehaviour{
 		currentRoom.Clear();
 		bool b = room.Visited(false);
 		string s = room.ToString();
-		if(s.Contains("Boss")&&!b){
-			CreateFight(true);
-		}else if(s.Contains("Enemy")&&!b){
-			CreateFight(false);
-		}
 		currentRoom.Add(Instantiate(emptyroomPrefab));
 		bool open = false;
 		if(s.Contains("^")){
@@ -136,6 +131,13 @@ public class LevelController : MonoBehaviour{
 			}
 		}
 		room.Visited(true);
+		if(s.Contains("Boss")&&!b){
+			things.SetActive(false);
+			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
+		} else if(s.Contains("Enemy")&&!b){
+			things.SetActive(false);
+			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
+		}
 	}
 
 	public void HandleInput(string s) {
@@ -171,6 +173,7 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
+	/////
 	public void AttackPlayer(double damage){
 		Debug.Log((player.GetComponent("PlayerController") as PlayerController).Lifes());
 		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
@@ -185,14 +188,7 @@ public class LevelController : MonoBehaviour{
 			EndFight();
 		}
 	}
-
-	private void CreateFight(bool bossFight){
-		if(bossFight){
-			currentEnemy=Instantiate(boss);
-		}else{
-			currentEnemy=Instantiate(enemy);
-		}
-	}
+	/////
 
 	private void EndFight(){
 		if(r[cx,cy].ToString().Contains("Boss")){
@@ -204,4 +200,6 @@ public class LevelController : MonoBehaviour{
 			PlayerController.AddRugh(PlayerController.GetLevel()/5);
 		}
 	}
+
+
 }
