@@ -7,6 +7,7 @@ using UnityEngine;
 public class MapGen{
 
 	 private static Coord last;
+     private int maxD;
     
 
      public static Room[,] Gen(int width, int height, int amountOfRooms) {
@@ -23,7 +24,9 @@ public class MapGen{
             return map;
      }
 
-     private static void FillRec(Room[,] map, Coord coord, int amountOfRooms, System.Random random) {
+     public delegate void Action();
+     
+     private static void FillRec(Room[,] map, Coord coord, int amountOfRooms, System.Random random, int depth) {
          var paths = FreeAround(map, coord); 
 		 if (paths.Count < 1 || amountOfRooms < 1) {
              return;
@@ -40,8 +43,11 @@ public class MapGen{
              map[coord.X, coord.Y].Dirs.Add(pCoord.Item2); 
              var room = new Room(GetRandomRoom(random), new List<Dir> { Opposite(pCoord.Item2) }); 
              map[pCoord.Item1.X, pCoord.Item1.Y] = room;
-             last = pCoord.Item1;
-             FillRec(map, pCoord.Item1, nDistribution[i] - 1, random);
+             if (depth > maxD) {
+                 last = pCoord.Item1;
+                 maxD = depth;
+             }
+             FillRec(map, pCoord.Item1, nDistribution[i] - 1, random, depth + 1);
          }
      }
 
