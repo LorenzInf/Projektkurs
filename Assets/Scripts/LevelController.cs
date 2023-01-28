@@ -25,7 +25,7 @@ public class LevelController : MonoBehaviour{
 
 	void Start() {
 		scale=Camera.main.orthographicSize / 6;
-		int i = PlayerController.GetLevel() + 4;
+		int i = PlayerController.GetLevel() * 2 + 5;
 		SetUpLevel(i, i, i);
 		SetRoom();
 	}

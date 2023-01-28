@@ -50,3 +50,6 @@ TagManager:
   - name: Front
     uniqueID: 1760070281
     locked: 0
+  - name: Very Front
+    uniqueID: 2421822131
+    locked: 0
