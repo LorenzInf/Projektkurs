@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour{
 	public GameObject[] weapons;
 
 	public void Start(){
-		scale=Camera.main.orthographicSize / 5;
+		scale=Camera.main.orthographicSize / 6;
 		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
 	}
 
@@ -75,14 +75,14 @@ public class PlayerController : MonoBehaviour{
 				gameObject.transform.position = new Vector3(v.x, 2.49f*scale, v.z);
 				return MapGen.Dir.Down;
 			}
-		}else if((v.x>9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
+		}else if((v.x>9.01*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Right)){
-				gameObject.transform.position = new Vector3(-9.29f*scale, v.y, v.z);
+				gameObject.transform.position = new Vector3(-9f*scale, v.y, v.z);
 				return MapGen.Dir.Right;
 			}
-		}else if((v.x<-9.3*scale)&&v.y<1*scale&&v.y>-1*scale){
+		}else if((v.x<-9.01*scale)&&v.y<1*scale&&v.y>-1*scale){
 			if (level.CanMove(MapGen.Dir.Left)){
-				gameObject.transform.position = new Vector3(9.29f*scale, v.y, v.z);
+				gameObject.transform.position = new Vector3(9f*scale, v.y, v.z);
 				return MapGen.Dir.Left;
 			}
 		}
@@ -91,11 +91,11 @@ public class PlayerController : MonoBehaviour{
 
 	private void ValidatePosition() {
 		Vector3 v=gameObject.transform.position;
-		if (v.x<-9.4*scale){
-			gameObject.transform.position = new Vector3(-9.39f*scale,v.y,v.z);
+		if (v.x<-9.1*scale){
+			gameObject.transform.position = new Vector3(-9.09f*scale,v.y,v.z);
 		}
-		if (v.x>9.4*scale){
-			gameObject.transform.position = new Vector3(9.39f*scale,v.y,v.z);
+		if (v.x>9.1*scale){
+			gameObject.transform.position = new Vector3(9.09f*scale,v.y,v.z);
 		}
 		if (v.y<-2.6*scale){
 			gameObject.transform.position = new Vector3(v.x,-2.59f*scale,v.z);
