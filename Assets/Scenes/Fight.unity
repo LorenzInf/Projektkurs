@@ -968,6 +968,7 @@ MonoBehaviour:
   text: {fileID: 745452050}
   headerText: {fileID: 887334276}
   timerBar: {fileID: 1270425707}
+  textAsset: {fileID: 4900000, guid: 6bb8030e1c6c787459dfe9c3e013c651, type: 3}
 --- !u!4 &1169478658
 Transform:
   m_ObjectHideFlags: 0

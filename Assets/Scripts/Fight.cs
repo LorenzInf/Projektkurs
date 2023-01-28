@@ -47,6 +47,7 @@ public class Fight : MonoBehaviour
 	public TextMeshProUGUI text;
     public TextMeshProUGUI headerText;
     public Image timerBar;
+    public TextAsset textAsset;
     
     void Start() {
         //Set Enemy stats
@@ -61,20 +62,19 @@ public class Fight : MonoBehaviour
         enemyDmg = 10 + enemyLevel * 5;
 
         //Load words
-        Resources.Load("Assets/Text/words.txt");
-        allWords = System.IO.File.ReadAllLines("Assets/Text/words.txt");
+        allWords = textAsset.text.Split("\r\n");
 
 		//Lock player movement in Level Scene
         PlayerController.MovementLocked(true);
 
-		//Make a random enemy appear
+        //Make a random enemy appear
         if (UnityEngine.Random.Range(-1.0f, 1.0f) > 0.0) {
             oger.SetActive(true);
             enemyType = "oger";
         } else {
             fluffy.SetActive(true);
             enemyType = "fluffy";
-        }
+        }        
 
         //Show intro text for 2 seconds
 		timer = 1.5f;
@@ -191,6 +191,12 @@ public class Fight : MonoBehaviour
     }
 
     private void EnemyAttack(){
+        if(enemyHealth > 0) {
+            weaponFieldEmpty.SetActive(true);
+            weaponField.ActivateInputField();
+        } else {
+            EndFight();
+        }
         headerTextEmpty.SetActive(false);
         timerBar.fillAmount = 0.0f;
         text.SetText("<#FFFFFF00>Placeholder");
@@ -207,12 +213,6 @@ public class Fight : MonoBehaviour
         (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).TakeDamage(enemyDmg * attackModifier);
         healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
         //TODO Enemy attack animation?
-        if(enemyHealth > 0) {
-            weaponFieldEmpty.SetActive(true);
-            weaponField.ActivateInputField();
-        } else {
-            EndFight();
-        }
         if(PlayerController.GetHealth() <= 0) {
             PlayerController._tempRugh = 0;
             SceneManager.LoadScene("Hub");
