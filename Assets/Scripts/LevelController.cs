@@ -14,18 +14,15 @@ public class LevelController : MonoBehaviour{
 	public GameObject sideDoorClosedPrefab;
 	public GameObject ChestOpenPrefab;
 	public GameObject ChestClosedPrefab;
-	public GameObject enemy;
-	public GameObject boss;
 
 	private List<GameObject> currentRoom=new List<GameObject>();
-	private GameObject currentEnemy=null;
 	private int cx = -1,cy = -1;
 	private MapGen.Room[,] r = null;
 	private float scale;
 
 	void Start() {
 		scale=Camera.main.orthographicSize / 6;
-		int i = PlayerController.GetLevel() * 2 + 5;
+		int i = PlayerController.GetLevel() * 2 + 8;
 		SetUpLevel(i, i, i);
 		SetRoom();
 	}
@@ -57,8 +54,6 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public bool CanMove(MapGen.Dir dir){
-		//if(currentEnemy!=null)
-		//	return false;
 		string s = r[cx,cy].ToString();
 		if(dir==MapGen.Dir.Up&&s.Contains("^")){
 			return true;
@@ -161,12 +156,7 @@ public class LevelController : MonoBehaviour{
 		s=s.ToLower();
 		var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
 	    if (w != null) {
-			if(currentEnemy==null){
-				(player.GetComponent("PlayerController") as PlayerController).Attack(w,0);
-			}else{
-				Vector3 v = player.transform.position - currentEnemy.transform.position;
-				AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w,v.magnitude));
-			}
+			//Print weapon stats?
 	    } else {
 		    if (s == "healingpotion"){
 			    (player.GetComponent("PlayerController") as PlayerController).UseItem(s, null);
@@ -196,32 +186,17 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
-	/////
-	public void AttackPlayer(double damage){
-		Debug.Log((player.GetComponent("PlayerController") as PlayerController).Lifes());
-		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
-		if(!(player.GetComponent("PlayerController") as PlayerController).Lifes()){
-			EndFight();
-		}
+	public static void EndFight() {
+		PlayerController._tempRugh += 1;
+        PlayerController.MovementLocked(false);
+		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
 	}
 
-	public void AttackEnemy(double damage){
-		(currentEnemy.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
-		if(!(currentEnemy.GetComponent("EnemyController") as EnemyController).Lifes()){
-			EndFight();
-		}
-	}
-	/////
-
-	private void EndFight(){
-		if(r[cx,cy].ToString().Contains("Boss")){
-			PlayerController.AddRugh(PlayerController.GetLevel());
-			PlayerController.LevelUp();
-			SceneManager.LoadScene("Hub");
-		}else{
-			Destroy(currentEnemy);
-			currentEnemy = null;
-			PlayerController.AddRugh(PlayerController.GetLevel()/5);
-		}
+	public static void EndRun(){
+		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
+		PlayerController.LevelUp();
+		PlayerController._rugh += (int) (5 + (PlayerController._level / 5)) + PlayerController._tempRugh;
+        PlayerController._tempRugh = 0;
+		SceneManager.LoadScene("Hub");
 	}
 }

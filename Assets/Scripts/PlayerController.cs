@@ -9,8 +9,9 @@ public class PlayerController : MonoBehaviour{
 	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
     private static double _maxHealth=100;
     public static double _health=100;
-    private static double _level=1;
-    private static int _rugh = 0;
+    public static double _level=1;
+    public static int _rugh = 0;
+	public static int _tempRugh = 0;
     private static bool _movementLocked = false;
     
     private bool left=false;

@@ -443,7 +443,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 1760070281
+  m_SortingLayerID: -1873145165
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!1 &745452048
@@ -785,7 +785,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 96}
-  m_SizeDelta: {x: 329.25, y: 108.16}
+  m_SizeDelta: {x: 1004.25, y: 70.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &887334276
 MonoBehaviour:
@@ -896,7 +896,7 @@ GameObject:
   - component: {fileID: 1169478656}
   - component: {fileID: 1169478657}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Fight Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -964,8 +964,9 @@ MonoBehaviour:
   healthBarEnemy: {fileID: 1170533963}
   weaponField: {fileID: 1988285622}
   weaponFieldEmpty: {fileID: 1494169556}
-  typeText: {fileID: 1269124913}
+  headerTextEmpty: {fileID: 1269124913}
   text: {fileID: 745452050}
+  headerText: {fileID: 887334276}
   timerBar: {fileID: 1270425707}
 --- !u!4 &1169478658
 Transform:

@@ -13,9 +13,24 @@ public class Fight : MonoBehaviour
     private float sinValue;
 	private bool fightText;
     private bool attacking;
+    private bool readying;
+    private bool postAttack;
     private int fightTextOpacity = 99;
     private string[] allWords;
-    private string currentWord;
+    private string currWord;
+    private char[] currWordArr;
+    private string currDisplayedWord;
+    private char[] currDisplayedWordArr;
+    private string currInput;
+    private int letterCount = 0;
+    private int errors;
+    private int attackSuccess; //0 = Miss, 1 = Barely, 2 = Okay, 3 = Good, 4 = Great, 5 = Perfect
+    private WeaponController currWeapon;
+
+    private int enemyLevel;
+    private int enemyHealth;
+    private int enemyMaxHealth;
+    private int enemyDmg;
 
     public static bool _isBossFight;
 
@@ -28,11 +43,23 @@ public class Fight : MonoBehaviour
     public Image healthBarEnemy;
 	public TMP_InputField weaponField;
     public GameObject weaponFieldEmpty;
-    public GameObject typeText;
+    public GameObject headerTextEmpty;
 	public TextMeshProUGUI text;
+    public TextMeshProUGUI headerText;
     public Image timerBar;
     
     void Start() {
+        //Set Enemy stats
+        enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
+        if(_isBossFight) {
+            enemyHealth = 50 + enemyLevel * 10;
+            enemyMaxHealth = 50 + enemyLevel * 10;
+        } else {
+            enemyHealth = 10 + enemyLevel * 10;
+            enemyMaxHealth = 10 + enemyLevel * 10;
+        }
+        enemyDmg = 10 + enemyLevel * 5;
+
         //Load words
         Resources.Load("Assets/Text/words.txt");
         allWords = System.IO.File.ReadAllLines("Assets/Text/words.txt");
@@ -56,51 +83,162 @@ public class Fight : MonoBehaviour
 		    text.SetText("<#8B0000>Boss Fight!!!");
         else
             text.SetText("<#8B0000>Fight!");
+
+        //Set player health bar
+        healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
     }
 
     private void EndFight() {
-        PlayerController.MovementLocked(false);
-        SceneManager.UnloadSceneAsync("Fight");
+        if(_isBossFight) {
+            LevelController.EndRun();
+        } else {
+            LevelController.EndFight();
+            SceneManager.UnloadSceneAsync("Fight");
+        }
     }
     
     //Called when weaponField is deselected
     public void SelectWeapon() {
         WeaponController weapon = (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).GetWeapon(weaponField.text);
+        currWeapon = weapon;
         if(weapon != null) {
-            Debug.Log($"Weapon found: {weapon.GetName()}");
-            attacking = true;
-            weaponFieldEmpty.SetActive(false);
-            typeText.SetActive(true);
-            currentWord = allWords[(int) UnityEngine.Random.Range(0.0f, (float) allWords.Length)];
-            text.SetText(currentWord);
+            //Set up attack
+            attacking = true; //Make attacking true
+            readying = true; //Make readying true
+            weaponFieldEmpty.SetActive(false); //Remove the text field
+            headerTextEmpty.SetActive(true); //Show the header
+            currWord = allWords[(int) UnityEngine.Random.Range(0.0f, (float) allWords.Length)]; //Get a random word to type
+            headerText.text = "<#BE271A>Get ready...";
+            timer = 2f;
         } else {
             weaponField.text = "Couldn't find that weapon...";
         }
     }
 
-    void Update() {
-        //Update player healthbar
-        healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
+    private void StartAttack() {
+        errors = 0;
+        currInput = "";
+        currWordArr = currWord.ToCharArray();
+        currDisplayedWord = $"<#1DF61B><#FFFFFF>{currWord}";
+        text.SetText(currDisplayedWord); //Make the word to type visible
+        letterCount = 0;
+        headerText.text = "<#BE271A>Type!"; //Tell the player to type
+        readying = false; //No longer readying
+        timer = timerMax = 0.75f + (float) currWord.Length * 0.2f; //Set timer appropriately
+        timerBar.color = new Color(105f / 255f, 229f / 255f, 51f / 255f, 1f);
+    }
 
+    private void ValidateAttack() {
+        timer = 2;
+        postAttack = true;
+        attacking = false;
+            int levenshteinDist = TypingController.Levenshtein(currInput,currWord);
+            if (levenshteinDist == 0) {
+                if (timerBar.fillAmount > 0.5) {
+                    headerText.text = "<#53F855>Perfect!! / +20% DMG";
+                    enemyHealth -= (int) (currWeapon.Use() * 1.2);
+                    attackSuccess = 5;
+                } else if (timerBar.fillAmount > 0.25) {
+                    headerText.text = "<#8EF853>Great!";
+                    enemyHealth -= (int) (currWeapon.Use());
+                    attackSuccess = 4;
+                } else {
+                    headerText.text = "<#D3F853>Good";
+                    enemyHealth -= (int) (currWeapon.Use());
+                    attackSuccess = 3;
+                }
+            } else if (levenshteinDist / currWord.Length < 0.25) {
+                if (timerBar.fillAmount > 0.5) {
+                    headerText.text = "<#D3F853>Good";
+                    enemyHealth -= (int) (currWeapon.Use());
+                    attackSuccess = 3;
+                } else if (timerBar.fillAmount > 0.25) {
+                    headerText.text = "<#F8E153>Okay";
+                    enemyHealth -= (int) (currWeapon.Use());
+                    attackSuccess = 2;
+                } else {
+                    headerText.text = "<#F86353>Barely.. / -25% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
+                    attackSuccess = 1;
+                }
+            } else if (levenshteinDist / currWord.Length < 0.5) {
+                if (timerBar.fillAmount > 0.5) {
+                    headerText.text = "<#F8E153>Okay / -10% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.9);
+                    attackSuccess = 2;
+                } else if (timerBar.fillAmount > 0.25) {
+                    headerText.text = "<#F86353>Barely.. / -25% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
+                    attackSuccess = 1;
+                } else {
+                    headerText.text = "<#CD2626>Miss...";
+                    attackSuccess = 0;
+                }
+            } else if (levenshteinDist / currWord.Length < 0.75) {
+                if (timerBar.fillAmount > 0.5) {
+                    headerText.text = "<#F86353>Barely.. / -25% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
+                    attackSuccess = 1;
+                } else {
+                    headerText.text = "<#CD2626>Miss...";
+                    attackSuccess = 0;
+                }
+            } else {
+                headerText.text = "<#CD2626>Miss...";
+                attackSuccess = 0;
+            }
+        healthBarEnemy.fillAmount = (float) enemyHealth / enemyMaxHealth;
+    }
+
+    private void EnemyAttack(){
+        headerTextEmpty.SetActive(false);
+        timerBar.fillAmount = 0.0f;
+        text.SetText("<#FFFFFF00>Placeholder");
+        double attackModifier = 1;
+        if (attackSuccess == 5) {
+            attackModifier = 0;
+        } else if (attackSuccess == 4) {
+            attackModifier = 0.25;
+        } else if (attackSuccess == 3) {
+            attackModifier = 0.5;
+        } else if (attackSuccess == 2) {
+            attackModifier = 0.75;
+        }
+        (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).TakeDamage(enemyDmg * attackModifier);
+        healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
+        //TODO Enemy attack animation?
+        if(enemyHealth > 0) {
+            weaponFieldEmpty.SetActive(true);
+            weaponField.ActivateInputField();
+        } else {
+            EndFight();
+        }
+        if(PlayerController.GetHealth() <= 0) {
+            PlayerController._tempRugh = 0;
+            SceneManager.LoadScene("Hub");
+        }
+    }
+
+    void Update() {
         //Count down timer
         if (timer > 0) {
             timer -= Time.deltaTime;
         } else {
+            if (postAttack) {
+                postAttack = false;
+                EnemyAttack();
+            }
             if (fightText)
 		        FightText();
-        }
-
-        //Set timerBar to percentage of timer while attacking
-        if (attacking) {
-            timerBar.fillAmount = timer / timerMax;
+            if (attacking && readying) {
+                StartAttack();
+            } else if (attacking && !readying) {
+                ValidateAttack();
+            }
         }
 
         //Count up sinValue
         sinValue += Time.deltaTime;
-        if (attacking) {
-            //Move type text
-            typeText.transform.position = new Vector2(0,(float) Math.Sin(4*sinValue)/7);
-        }
 
         if(enemyType.Equals("fluffy")) {
             //Move fluffy & health bar
@@ -110,6 +248,57 @@ public class Fight : MonoBehaviour
             //Move oger & health bar
             Vector2 v = new Vector2((float) ((Math.Sin(2*sinValue) + Math.Sin(sinValue))/3),0);
             enemyObjects.transform.position = v;
+        }
+
+
+        // -- PLAYER ATTACK --
+
+        if (attacking) {
+            headerTextEmpty.transform.position = new Vector2(0,(float) Math.Sin(4*sinValue)/7); //Wave Type! / ready text
+        
+            // --- After readying ---
+            if (!readying) {
+                //Set timerBar to percentage of timer while attacking
+                timerBar.fillAmount = timer / timerMax;
+                if(timer <= timerMax / 2) {
+                    timerBar.color = Color.yellow;
+                    if (timer <= timerMax / 4) {
+                        timerBar.color = new Color(1f,0.25f,0.25f,1f);
+                    }
+                }
+                
+                //Read input
+                foreach (char c in Input.inputString) {
+                    if(Char.IsLetter(c)) {
+                        currInput += c;
+                        currDisplayedWordArr = currDisplayedWord.ToCharArray();
+                        string newDisplayedWord = "";
+
+                        //Append already typed
+                        for(int i = 0; i < 9 /* < Initial colour code */ + letterCount + errors * 18 /* 2 Color codes with each error */; i++) {
+                            newDisplayedWord += currDisplayedWordArr[i];
+                        }
+
+                        //If the letter that was just input is was correct
+                        if(c.Equals(currWordArr[letterCount])) {
+                            newDisplayedWord += c;
+                        } else {
+                            newDisplayedWord += $"<#EF1D0B>{c}<#1DF61B>";
+                            errors++;
+                        }
+                        letterCount++;
+                        newDisplayedWord += "<#FFFFFF>";
+                        for(int i = letterCount; i < currWordArr.Length; i++) {
+                            newDisplayedWord += currWordArr[i];
+                        }
+                        currDisplayedWord = newDisplayedWord;
+                        text.text = currDisplayedWord;
+                        if(letterCount == currWord.Length) {
+                            ValidateAttack();
+                        }
+                    }
+                }
+            }
         }
     }
 	
