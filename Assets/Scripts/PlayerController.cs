@@ -91,10 +91,10 @@ public class PlayerController : MonoBehaviour{
 
 	private void ValidatePosition() {
 		Vector3 v=gameObject.transform.position;
-		if (v.x<-9.1*scale){
+		if (v.x<-9.3*scale){
 			gameObject.transform.position = new Vector3(-9.09f*scale,v.y,v.z);
 		}
-		if (v.x>9.1*scale){
+		if (v.x>9.3*scale){
 			gameObject.transform.position = new Vector3(9.09f*scale,v.y,v.z);
 		}
 		if (v.y<-2.6*scale){
