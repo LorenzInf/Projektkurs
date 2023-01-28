@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class ResizeHandler : MonoBehaviour {
     void Start() {
-        gameObject.transform.localScale *= Camera.main.orthographicSize / 5;
+        gameObject.transform.localScale *= Camera.main.orthographicSize / 6;
     }
 }
