@@ -147,9 +147,11 @@ public class LevelController : MonoBehaviour{
 		}
 		room.Visited(true);
 		if(s.Contains("Boss")&&!b){
+			Fight._isBossFight = true;
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		} else if(s.Contains("Enemy")&&!b){
+			Fight._isBossFight = false;
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		}
