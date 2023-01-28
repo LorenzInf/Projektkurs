@@ -37,6 +37,8 @@ public class Fight : MonoBehaviour
 		    text.SetText("<#8B0000>Boss Fight!!!");
         else
             text.SetText("<#8B0000>Fight!");
+
+        GameObject.Find("Player").GetComponent("PlayerController");
     }
 
     private void EndFight() {

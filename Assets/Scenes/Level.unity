@@ -428,7 +428,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 2029565751}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7856917466215053375, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
       propertyPath: sr
@@ -500,11 +500,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5112025181532477066, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -4.507393
       objectReference: {fileID: 0}
     - target: {fileID: 5112025181532477066, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.08887555
       objectReference: {fileID: 0}
     - target: {fileID: 5112025181532477066, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -798,16 +798,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1315814565 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8221136961317507711, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
-  m_PrefabInstance: {fileID: 670769347}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1315814568 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5112025181532477066, guid: 744f0b5b7505c334187fd0f3d0b1feb7, type: 3}
   m_PrefabInstance: {fileID: 670769347}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1344488204
@@ -823,7 +818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7215314392505381999, guid: fdf6e9b6ff3e2d245893900316eb417a, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7215314392505381999, guid: fdf6e9b6ff3e2d245893900316eb417a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1158,7 +1153,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1985481991}
-  - {fileID: 1315814568}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
