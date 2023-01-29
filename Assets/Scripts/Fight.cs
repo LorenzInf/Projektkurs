@@ -50,11 +50,13 @@ public class Fight : MonoBehaviour
     public TextAsset textAsset;
 	public TextMeshProUGUI playerHealthNr;
 	public TextMeshProUGUI enemyHealthNr;
+	public GameObject bossRoom;
     
     void Start() {
         //Set Enemy stats
         enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
         if(_isBossFight) {
+			bossRoom.SetActive(true);
             enemyHealth = 50 + enemyLevel * 4;
             enemyMaxHealth = 50 + enemyLevel * 4;
         } else {
