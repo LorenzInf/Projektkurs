@@ -121,7 +121,7 @@ public class Shop : MonoBehaviour
                     if (el.Key.Equals("Upgrade")) {
                         if (ownedHealthUps == 0) {
                             if (PlayerController.GetRugh() >= 10) {
-                                PlayerController.AddRugh(-5);
+                                PlayerController.AddRugh(-10);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 200;
@@ -134,7 +134,7 @@ public class Shop : MonoBehaviour
                             }
                         } else if (ownedHealthUps == 1) {
                             if (PlayerController.GetRugh() >= 20) {
-                                PlayerController.AddRugh(-10);
+                                PlayerController.AddRugh(-20);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 300;
@@ -147,7 +147,7 @@ public class Shop : MonoBehaviour
                             }
                         } else if (ownedHealthUps == 2) {
                             if (PlayerController.GetRugh() >= 30) {
-                                PlayerController.AddRugh(-15);
+                                PlayerController.AddRugh(-30);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 400;
