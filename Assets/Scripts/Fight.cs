@@ -215,6 +215,7 @@ public class Fight : MonoBehaviour
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
             PlayerController._tempRugh = 0;
+			PlayerController.MovementLocked(false);
             SceneManager.LoadScene("Hub");
         }
     }
