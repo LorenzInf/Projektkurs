@@ -430,6 +430,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60339102}
   m_CullTransparentMesh: 1
+--- !u!1001 &80536210
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1961985713753517538, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_Name
+      value: Bat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5268637212691509767, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
 --- !u!1 &199597477
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +927,7 @@ GameObject:
   m_Component:
   - component: {fileID: 876243439}
   - component: {fileID: 876243440}
+  - component: {fileID: 876243441}
   m_Layer: 0
   m_Name: bright mummy
   m_TagString: Untagged
@@ -884,7 +942,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 876243438}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -353.00015, y: -3, z: 1}
   m_LocalScale: {x: 325.58353, y: 325.58353, z: 325.58353}
   m_ConstrainProportionsScale: 0
@@ -944,6 +1002,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &876243441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876243438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e38a9d99d83714a8dc3a3839728bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 876243438}
+  inventar: {fileID: 876243438}
+  level: {fileID: 0}
+  canMove: 0
+  weapons:
+  - {fileID: 1961985713753517538, guid: 3cf8813e2baf9d14594de39f14001032, type: 3}
+  - {fileID: 2345222411268397227, guid: d011b03b58f05bb41952e5079b3d960b, type: 3}
+  - {fileID: 1668039774104143237, guid: 5072210796114a3459e6f5e99d0e20b0, type: 3}
+  - {fileID: 618429191320249607, guid: aaf011be454db31429bcd2bfa7918fb1, type: 3}
+  - {fileID: 7437527148584888139, guid: ff7fbd574d7932540bb4468590dd77a6, type: 3}
+  - {fileID: 3020751167827919189, guid: fa92983aa1462cc4f8a7388967f493ac, type: 3}
+  - {fileID: 8053133191666187919, guid: 4fe9f053638dcb6449c8b372491d1b3e, type: 3}
+  - {fileID: 6522792429782024154, guid: 23ea002cc2a56a5408a670956022969d, type: 3}
 --- !u!1 &887334274
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,9 @@ public class LevelController : MonoBehaviour{
 	private MapGen.Room[,] r = null;
 	private float scale;
 
-	void Start() {
+	void Start()
+	{
+		(player.GetComponent("PlayerController") as PlayerController).Reset();
 		scale=Camera.main.orthographicSize / 6;
 		Config.MakeAllAvailabel();
 		int i = PlayerController.GetLevel() * 2 + 8;
