@@ -114,6 +114,7 @@ public class PlayerController : MonoBehaviour{
 		_weapons = new Dictionary<string,WeaponController>();
 		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 		Heal();
+		_movementLocked = false;
 	}
 
 	public double Attack(WeaponController w,double dist) {
