@@ -22,6 +22,7 @@ public class LevelController : MonoBehaviour{
 
 	void Start() {
 		scale=Camera.main.orthographicSize / 6;
+		Config.MakeAllAvailabel();
 		int i = PlayerController.GetLevel() * 2 + 8;
 		SetUpLevel(i, i, i);
 		SetRoom();

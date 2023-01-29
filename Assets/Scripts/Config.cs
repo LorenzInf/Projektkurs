@@ -67,6 +67,21 @@ public class Config : MonoBehaviour{
         return aWeapons[i];
     }
     
+    public static void MakeAllAvailabel()
+    {
+        MakeAvailabel(Item.AmmoBox);
+        MakeAvailabel(Item.HealingPotion);
+        MakeAvailabel(Item.RepairKit);
+        MakeAvailabel(Weapon.Bat);
+        MakeAvailabel(Weapon.Bow);
+        MakeAvailabel(Weapon.Dagger);
+        MakeAvailabel(Weapon.Sword);
+        MakeAvailabel(Weapon.Machete);
+        MakeAvailabel(Weapon.Pistol);
+        MakeAvailabel(Weapon.Spear);
+        MakeAvailabel(Weapon.Scythe);
+    }
+    
     public enum Item{
         AmmoBox,
         HealingPotion,

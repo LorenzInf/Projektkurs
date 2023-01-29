@@ -177,15 +177,20 @@ public class PlayerController : MonoBehaviour{
     public void UseItem(string item,WeaponController wc){
 	    switch (item) {
 		    case "healingpotion":
-			    _health = _maxHealth;
+			    if (_items.Remove(Config.Item.HealingPotion))
+				    Heal();
 			    break;
 		    case "ammobox":
-			    if (wc!=null)
-				    wc.Refill();
+			    if (wc != null){
+				    if (_items.Remove(Config.Item.AmmoBox))
+					    wc.Refill();
+			    }
 			    break;
 		    case "repairkit":
-			    if (wc!=null)
-				    wc.Repair();
+			    if (wc != null){
+				    if (_items.Remove(Config.Item.RepairKit))
+					    wc.Repair();
+			    }
 			    break;
 	    }
     }
