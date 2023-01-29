@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour{
 
 	public void Start(){
 		scale=Camera.main.orthographicSize / 6;
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 	}
 
     public void Update(){
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour{
 	public void Reset(){
 		_items=new List<Config.Item>();
 		_weapons = new Dictionary<string,WeaponController>();
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 		Heal();
 	}
 

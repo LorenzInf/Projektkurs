@@ -62,7 +62,7 @@ public class Fight : MonoBehaviour
         enemyDmg = 10 + enemyLevel * 5;
 
         //Load words
-        allWords = textAsset.text.Split("\r\n");
+        allWords = textAsset.text.Split("\n");
 
 		//Lock player movement in Level Scene
         PlayerController.MovementLocked(true);
