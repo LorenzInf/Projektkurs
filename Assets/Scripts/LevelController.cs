@@ -143,18 +143,18 @@ public class LevelController : MonoBehaviour{
 		room.Visited(true);
 		if(s.Contains("Boss")&&!b){
 			Fight._isBossFight = true;
-			SetViseble(false);
+			SetVisible(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		} else if(s.Contains("Enemy")&&!b){
 			Fight._isBossFight = false;
-			SetViseble(false);
+			SetVisible(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		}
 	}
 
-	public void SetViseble(bool viseble){
+	public void SetVisible(bool viseble){
 		foreach (GameObject gameObject in currentRoom){
 			gameObject.SetActive(viseble);
 		}
@@ -195,7 +195,7 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public void EndFight(){
-		SetViseble(true);
+		SetVisible(true);
 		PlayerController._tempRugh += 1;
         PlayerController.MovementLocked(false);
 		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
