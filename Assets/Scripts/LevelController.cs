@@ -95,11 +95,11 @@ public class LevelController : MonoBehaviour{
 			open = r[cx,cy+1].Visited(false);
 			if(open){
 				go = Instantiate(doorOpenPrefab);
-				go.transform.position = new Vector3(0f,-4.88f,0f);
+				go.transform.position = new Vector3(0f,-4.88f,-6.0f);
 				currentRoom.Add(go);
 			}else{
 				go = Instantiate(doorClosedPrefab);
-				go.transform.position = new Vector3(0f,-4.88f,0f);
+				go.transform.position = new Vector3(0f,-4.88f,-6.0f);
 				currentRoom.Add(go);
 			}
 		}
@@ -143,12 +143,21 @@ public class LevelController : MonoBehaviour{
 		room.Visited(true);
 		if(s.Contains("Boss")&&!b){
 			Fight._isBossFight = true;
+			SetVisebel(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		} else if(s.Contains("Enemy")&&!b){
 			Fight._isBossFight = false;
+			SetVisebel(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
+		}
+	}
+
+	public void SetVisebel(bool visebel){
+		foreach (GameObject gameObject in currentRoom){
+			var renderer = gameObject.GetComponent<Renderer> ();
+			renderer.enabled = visebel;
 		}
 	}
 
@@ -186,7 +195,8 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
-	public static void EndFight() {
+	public static void EndFight(){
+		SetVisebel(true);
 		PlayerController._tempRugh += 1;
         PlayerController.MovementLocked(false);
 		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
