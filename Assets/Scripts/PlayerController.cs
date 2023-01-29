@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour{
 
 	public void Start(){
 		scale=Camera.main.orthographicSize / 6;
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
+		//AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 	}
 
     public void Update(){
@@ -110,8 +110,8 @@ public class PlayerController : MonoBehaviour{
 	}
 
 	public void Reset(){
-		_items=new List<Config.Item>();
-		_weapons = new Dictionary<string,WeaponController>();
+		_items.Clear();
+		_weapons.Clear();
 		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 		Heal();
 		_movementLocked = false;
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour{
     }
     
     public void AddWeapon(WeaponController w){
-	    if (w != null) {
+	    if (w != null){
 		    if (GetWeapon(w.GetName()) != null) {
 			    _weapons.Remove(w.GetName());
 		    }
@@ -223,10 +223,10 @@ public class PlayerController : MonoBehaviour{
     public void SetLastWeapon(WeaponController w) {
 	    string type = w.GetType().ToString().ToLower();
 	    foreach (var weapon in weapons) {
-			Debug.Log(weapon.name.ToLower());
 		    if (weapon.name.ToLower() == type) {
 			    Destroy(current);
 			    current = Instantiate(weapon);
+			    Debug.Log(current);
 				if(left)
 					current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 		    }

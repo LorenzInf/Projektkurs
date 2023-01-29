@@ -108,6 +108,7 @@ public class Fight : MonoBehaviour
         WeaponController weapon = (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).GetWeapon(weaponField.text);
         currWeapon = weapon;
         if(weapon != null) {
+            (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).SetLastWeapon(weapon);
             //Set up attack
             attacking = true; //Make attacking true
             readying = true; //Make readying true
