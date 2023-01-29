@@ -36,8 +36,6 @@ public class Shop : MonoBehaviour
     void Start() {
         possible.Add("Back", backText);
         possible.Add("Health", healthText);
-        possible.Add("Weapons", weaponsText);
-        possible.Add("Items", itemsText);
 
         rughBalance.SetText($"{PlayerController.GetRugh()} R$");
 		ownedHealthUps = (((int) PlayerController.GetMaxHealth() - 100) / 100);
@@ -105,7 +103,7 @@ public class Shop : MonoBehaviour
                         shelfText.SetActive(false);
                         subMenuOpen = true;
                     }
-
+					/*
                     if (el.Key.Equals("Weapons"))
                     {
                         weaponsMenu.SetActive(true);
@@ -118,7 +116,7 @@ public class Shop : MonoBehaviour
                         itemsMenu.SetActive(true);
                         shelfText.SetActive(false);
                         subMenuOpen = true;
-                    }
+                    }*/
                 } else {
                     if (el.Key.Equals("Upgrade")) {
                         if (ownedHealthUps == 0) {

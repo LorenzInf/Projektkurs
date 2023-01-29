@@ -200,16 +200,18 @@ public class Fight : MonoBehaviour
     }
 
     private void EnemyAttack(){
+		bool fightOver = false;
+		double attackModifier = 1;
         if(enemyHealth > 0) {
             weaponFieldEmpty.SetActive(true);
             weaponField.ActivateInputField();
         } else {
+			fightOver = true; 
             EndFight();
         }
         headerTextEmpty.SetActive(false);
         timerBar.fillAmount = 0.0f;
         text.SetText("<#FFFFFF00>Placeholder");
-        double attackModifier = 1;
         if (attackSuccess == 5) {
             attackModifier = 0;
         } else if (attackSuccess == 4) {
@@ -219,6 +221,7 @@ public class Fight : MonoBehaviour
         } else if (attackSuccess == 2) {
             attackModifier = 0.75;
         }
+		if (fightOver) attackModifier = 0;
         (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).TakeDamage(enemyDmg * attackModifier);
         healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
