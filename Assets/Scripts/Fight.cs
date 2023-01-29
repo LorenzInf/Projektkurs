@@ -147,7 +147,7 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use());
                     attackSuccess = 3;
                 }
-            } else if (levenshteinDist / currWord.Length < 0.25) {
+            } else if ((float) levenshteinDist / (float) currWord.Length < 0.25f) {
                 if (timerBar.fillAmount > 0.5) {
                     headerText.text = "<#D3F853>Good";
                     enemyHealth -= (int) (currWeapon.Use());
@@ -161,7 +161,7 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use() * 0.75);
                     attackSuccess = 1;
                 }
-            } else if (levenshteinDist / currWord.Length < 0.5) {
+            } else if ((float) levenshteinDist / (float) currWord.Length < 0.5f) {
                 if (timerBar.fillAmount > 0.5) {
                     headerText.text = "<#F8E153>Okay / -10% Damage";
                     enemyHealth -= (int) (currWeapon.Use() * 0.9);
@@ -174,7 +174,7 @@ public class Fight : MonoBehaviour
                     headerText.text = "<#CD2626>Miss...";
                     attackSuccess = 0;
                 }
-            } else if (levenshteinDist / currWord.Length < 0.75) {
+            } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
                 if (timerBar.fillAmount > 0.5) {
                     headerText.text = "<#F86353>Barely.. / -25% Damage";
                     enemyHealth -= (int) (currWeapon.Use() * 0.75);
