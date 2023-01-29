@@ -171,8 +171,9 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use() * 0.75);
                     attackSuccess = 1;
                 } else {
-                    headerText.text = "<#CD2626>Miss...";
-                    attackSuccess = 0;
+                    headerText.text = "<#F86353>Barely.. / -25% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
+                    attackSuccess = 1;
                 }
             } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
                 if (timerBar.fillAmount > 0.5) {
