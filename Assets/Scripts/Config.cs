@@ -75,7 +75,7 @@ public class Config : MonoBehaviour{
     }
     
     public enum Weapon{
-        Baseballbat,
+        Bat,
         Bow,
         Dagger,
         Sword,

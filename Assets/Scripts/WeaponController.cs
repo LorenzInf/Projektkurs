@@ -69,8 +69,8 @@ public class WeaponController{
     public static WeaponController CreateWeapon(Config.Weapon weapon){
         WeaponController wc = null;
         switch (weapon) {
-            case Config.Weapon.Baseballbat:
-                wc = new WeaponController(weapon.ToString().ToLower(),false,100,10,0.5,Config.Weapon.Baseballbat);
+            case Config.Weapon.Bat:
+                wc = new WeaponController(weapon.ToString().ToLower(),false,100,10,0.5,Config.Weapon.Bat);
                 break;
             case Config.Weapon.Bow:
                 wc = new WeaponController(weapon.ToString().ToLower(),true,20,15,10,Config.Weapon.Bow);

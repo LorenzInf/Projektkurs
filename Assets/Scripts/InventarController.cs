@@ -22,7 +22,7 @@ public class InventarController : MonoBehaviour{
     
     public void MakeAvailabel(Config.Weapon weapon) {
         switch (weapon) {
-            case Config.Weapon.Baseballbat:
+            case Config.Weapon.Bat:
                 Instantiate(weapons[0]);
                 break;
             case Config.Weapon.Bow:
