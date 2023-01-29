@@ -53,13 +53,13 @@ public class Fight : MonoBehaviour
         //Set Enemy stats
         enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
         if(_isBossFight) {
-            enemyHealth = 50 + enemyLevel * 10;
-            enemyMaxHealth = 50 + enemyLevel * 10;
+            enemyHealth = 50 + enemyLevel * 4;
+            enemyMaxHealth = 50 + enemyLevel * 4;
         } else {
-            enemyHealth = 10 + enemyLevel * 10;
-            enemyMaxHealth = 10 + enemyLevel * 10;
+            enemyHealth = 10 + enemyLevel * 2;
+            enemyMaxHealth = 10 + enemyLevel * 2;
         }
-        enemyDmg = 10 + enemyLevel * 5;
+        enemyDmg = 10 + enemyLevel;
 
         //Load words
         allWords = textAsset.text.Split("\n");
