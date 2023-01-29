@@ -53,13 +53,13 @@ public class Fight : MonoBehaviour
         //Set Enemy stats
         enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
         if(_isBossFight) {
-            enemyHealth = 50 + enemyLevel * 10;
-            enemyMaxHealth = 50 + enemyLevel * 10;
+            enemyHealth = 50 + enemyLevel * 4;
+            enemyMaxHealth = 50 + enemyLevel * 4;
         } else {
-            enemyHealth = 10 + enemyLevel * 10;
-            enemyMaxHealth = 10 + enemyLevel * 10;
+            enemyHealth = 10 + enemyLevel * 2;
+            enemyMaxHealth = 10 + enemyLevel * 2;
         }
-        enemyDmg = 10 + enemyLevel * 5;
+        enemyDmg = 10 + enemyLevel;
 
         //Load words
         allWords = textAsset.text.Split("\n");
@@ -171,8 +171,9 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use() * 0.75);
                     attackSuccess = 1;
                 } else {
-                    headerText.text = "<#CD2626>Miss...";
-                    attackSuccess = 0;
+                    headerText.text = "<#F86353>Barely.. / -25% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
+                    attackSuccess = 1;
                 }
             } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
                 if (timerBar.fillAmount > 0.5) {
@@ -215,6 +216,7 @@ public class Fight : MonoBehaviour
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
             PlayerController._tempRugh = 0;
+			PlayerController.MovementLocked(false);
             SceneManager.LoadScene("Hub");
         }
     }
