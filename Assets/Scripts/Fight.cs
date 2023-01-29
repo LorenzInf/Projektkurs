@@ -48,6 +48,8 @@ public class Fight : MonoBehaviour
     public TextMeshProUGUI headerText;
     public Image timerBar;
     public TextAsset textAsset;
+	public TextMeshProUGUI playerHealthNr;
+	public TextMeshProUGUI enemyHealthNr;
     
     void Start() {
         //Set Enemy stats
@@ -74,7 +76,8 @@ public class Fight : MonoBehaviour
         } else {
             fluffy.SetActive(true);
             enemyType = "fluffy";
-        }        
+        }
+		enemyHealthNr.text = ((int) enemyHealth).ToString();
 
         //Show intro text for 2 seconds
 		timer = 1.5f;
@@ -86,6 +89,7 @@ public class Fight : MonoBehaviour
 
         //Set player health bar
         healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
+		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
     }
 
     private void EndFight() {
@@ -188,7 +192,9 @@ public class Fight : MonoBehaviour
                 headerText.text = "<#CD2626>Miss...";
                 attackSuccess = 0;
             }
+		if (enemyHealth < 0) enemyHealth = 0;
         healthBarEnemy.fillAmount = (float) enemyHealth / enemyMaxHealth;
+		enemyHealthNr.text = ((int) enemyHealth).ToString();
     }
 
     private void EnemyAttack(){
@@ -213,6 +219,7 @@ public class Fight : MonoBehaviour
         }
         (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).TakeDamage(enemyDmg * attackModifier);
         healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
+		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
             PlayerController._tempRugh = 0;
