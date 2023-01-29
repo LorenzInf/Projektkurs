@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour{
 
 	private static List<Config.Item> _items=new List<Config.Item>();
 	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
-    private static double _maxHealth=100;
+    public static double _maxHealth=100;
     public static double _health=100;
     public static double _level=1;
     public static int _rugh = 0;

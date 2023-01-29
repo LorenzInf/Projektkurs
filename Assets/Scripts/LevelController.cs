@@ -203,6 +203,7 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public static void EndRun(){
+		PlayerController._health = PlayerController._maxHealth;
 		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
 		PlayerController.LevelUp();
 		PlayerController._rugh += (int) (5 + (PlayerController._level / 5)) + PlayerController._tempRugh;

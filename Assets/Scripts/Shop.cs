@@ -124,6 +124,7 @@ public class Shop : MonoBehaviour
                                 PlayerController.AddRugh(-5);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
+								PlayerController._health = 200;
                                 upgrade1.SetText("<#808080>Upgrade");
                                 hundredHealth1.SetText("<#808080>+100 Max Health");
                                 soldOut1.SetActive(true);
@@ -136,6 +137,7 @@ public class Shop : MonoBehaviour
                                 PlayerController.AddRugh(-10);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
+								PlayerController._health = 300;
                                 upgrade2.SetText("<#808080>Upgrade");
                                 hundredHealth2.SetText("<#808080>+100 Max Health");
                                 soldOut2.SetActive(true);
@@ -148,6 +150,7 @@ public class Shop : MonoBehaviour
                                 PlayerController.AddRugh(-15);
                                 rughBalance.SetText($"{PlayerController.GetRugh()} R$");
                                 PlayerController.Purchasable("health",true);
+								PlayerController._health = 400;
                                 upgrade2.SetText("<#808080>Upgrade");
                                 hundredHealth2.SetText("<#808080>+100 Max Health");
                                 soldOut2.SetActive(true);

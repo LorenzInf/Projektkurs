@@ -223,10 +223,12 @@ public class Fight : MonoBehaviour
         }
 		if (fightOver) attackModifier = 0;
         (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).TakeDamage(enemyDmg * attackModifier);
+		if (PlayerController._health < 0) PlayerController._health = 0;
         healthBarPlayer.fillAmount = (float) (PlayerController.GetHealth() / PlayerController.GetMaxHealth());
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
+			PlayerController._health = PlayerController._maxHealth;
             PlayerController._tempRugh = 0;
 			PlayerController.MovementLocked(false);
             SceneManager.LoadScene("Hub");
