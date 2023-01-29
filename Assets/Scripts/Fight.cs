@@ -184,7 +184,6 @@ public class Fight : MonoBehaviour
             } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
                 headerText.text = "<#CD2626>Miss...";
                 attackSuccess = 0;
-                }
             } else {
                 headerText.text = "<#CD2626>Miss...";
                 attackSuccess = 0;
