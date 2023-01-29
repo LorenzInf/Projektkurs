@@ -92,7 +92,7 @@ public class Fight : MonoBehaviour
         if(_isBossFight) {
             LevelController.EndRun();
         } else {
-            LevelController.EndFight();
+            (GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).EndFight();
             SceneManager.UnloadSceneAsync("Fight");
         }
     }

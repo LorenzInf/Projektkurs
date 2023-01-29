@@ -143,21 +143,20 @@ public class LevelController : MonoBehaviour{
 		room.Visited(true);
 		if(s.Contains("Boss")&&!b){
 			Fight._isBossFight = true;
-			SetVisebel(false);
+			SetViseble(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		} else if(s.Contains("Enemy")&&!b){
 			Fight._isBossFight = false;
-			SetVisebel(false);
+			SetViseble(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		}
 	}
 
-	public void SetVisebel(bool visebel){
+	public void SetViseble(bool viseble){
 		foreach (GameObject gameObject in currentRoom){
-			var renderer = gameObject.GetComponent<Renderer> ();
-			renderer.enabled = visebel;
+			gameObject.SetActive(viseble);
 		}
 	}
 
@@ -195,8 +194,8 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
-	public static void EndFight(){
-		SetVisebel(true);
+	public void EndFight(){
+		SetViseble(true);
 		PlayerController._tempRugh += 1;
         PlayerController.MovementLocked(false);
 		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
@@ -207,6 +206,7 @@ public class LevelController : MonoBehaviour{
 		PlayerController.LevelUp();
 		PlayerController._rugh += (int) (5 + (PlayerController._level / 5)) + PlayerController._tempRugh;
         PlayerController._tempRugh = 0;
+		PlayerController.MovementLocked(false);
 		SceneManager.LoadScene("Hub");
 	}
 }
