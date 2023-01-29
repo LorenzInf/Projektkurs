@@ -177,19 +177,28 @@ public class PlayerController : MonoBehaviour{
     public void UseItem(string item,WeaponController wc){
 	    switch (item) {
 		    case "healingpotion":
-			    if (_items.Remove(Config.Item.HealingPotion))
+			    if (_items.Remove(Config.Item.HealingPotion)){
 				    Heal();
+				    if (!_items.Contains(Config.Item.HealingPotion))
+					    (inventar.GetComponent("InventarController") as InventarController).Remove("healingpotion");
+			    }
 			    break;
 		    case "ammobox":
 			    if (wc != null){
-				    if (_items.Remove(Config.Item.AmmoBox))
+				    if (_items.Remove(Config.Item.AmmoBox)) {
 					    wc.Refill();
+					    if (!_items.Contains(Config.Item.AmmoBox))
+						    (inventar.GetComponent("InventarController") as InventarController).Remove("ammobox");
+				    }
 			    }
 			    break;
 		    case "repairkit":
 			    if (wc != null){
-				    if (_items.Remove(Config.Item.RepairKit))
+				    if (_items.Remove(Config.Item.RepairKit)) {
 					    wc.Repair();
+					    if (!_items.Contains(Config.Item.RepairKit))
+						    (inventar.GetComponent("InventarController") as InventarController).Remove("repairkit");
+				    }
 			    }
 			    break;
 	    }
