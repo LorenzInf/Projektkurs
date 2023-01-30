@@ -205,12 +205,12 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public static void EndRun(){
+		StatController.lastRunSuccessful = true;
 		PlayerController._health = PlayerController._maxHealth;
 		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
 		StatController._level++;
-		StatController._rugh += (int) (5 + (StatController._level / 5)) + StatController._tempRugh;
-        StatController._tempRugh = 0;
+		StatController._tempRugh += (int) (5 + (StatController._level / 5));
 		PlayerController.MovementLocked(false);
-		SceneManager.LoadScene("Hub");
+		SceneManager.LoadScene("ResultScreen");
 	}
 }

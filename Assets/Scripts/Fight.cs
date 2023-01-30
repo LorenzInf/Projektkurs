@@ -96,8 +96,10 @@ public class Fight : MonoBehaviour
 
     private void EndFight() {
         if(_isBossFight) {
+            StatController.enemiesKilled++;
             LevelController.EndRun();
         } else {
+            StatController.enemiesKilled++;
             (GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).EndFight();
             SceneManager.UnloadSceneAsync("Fight");
         }
@@ -198,6 +200,7 @@ public class Fight : MonoBehaviour
 		if (enemyHealth < 0) enemyHealth = 0;
         healthBarEnemy.fillAmount = (float) enemyHealth / enemyMaxHealth;
 		enemyHealthNr.text = ((int) enemyHealth).ToString();
+        StatController.wordsTyped++;
     }
 
     private void EnemyAttack(){
@@ -229,10 +232,11 @@ public class Fight : MonoBehaviour
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
+            StatController.lastRunSuccessful = false;
 			PlayerController._health = PlayerController._maxHealth;
             StatController._tempRugh = 0;
 			PlayerController.MovementLocked(false);
-            SceneManager.LoadScene("Hub");
+            SceneManager.LoadScene("ResultScreen");
         }
     }
 
@@ -299,9 +303,10 @@ public class Fight : MonoBehaviour
                         //If the letter that was just input is was correct
                         if(c.Equals(currWordArr[letterCount])) {
                             newDisplayedWord += c;
-                        } else {
+                        } else { //If it was incorrect
                             newDisplayedWord += $"<#EF1D0B>{c}<#1DF61B>";
                             errors++;
+                            StatController.typos++;
                         }
                         letterCount++;
                         newDisplayedWord += "<#FFFFFF>";
