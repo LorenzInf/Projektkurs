@@ -44,18 +44,13 @@ public class PlayerController : MonoBehaviour{
 			    x += 6 * scale;
 		    if (left == x > 0 && x != 0.0f) {
 			    gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
-			    if (current != null)
-				    current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			    left = !left;
 		    }
-
 		    gameObject.transform.position += new Vector3(x, y, 0.0f) * Time.deltaTime;
 		    MapGen.Dir dir = MovedToDoor();
 		    if (dir != MapGen.Dir.Null)
 			    level.Move(dir);
 		    ValidatePosition();
-		    if (current != null)
-			    current.transform.position = gameObject.transform.position;
 	    }
     }
 
@@ -209,8 +204,6 @@ public class PlayerController : MonoBehaviour{
 			    Destroy(current);
 			    current = Instantiate(weapon);
 			    Debug.Log(current);
-				if(left)
-					current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 		    }
 	    }
     }
