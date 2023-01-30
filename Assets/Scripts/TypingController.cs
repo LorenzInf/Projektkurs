@@ -8,7 +8,11 @@ public class TypingController {
     * Use the overloaded method for automatically calculating an appropriate
     * maximum depth
     */
-    public static int Levenshtein(string l, string r) {
+    public static int Levenshtein(string l, string r, int maxD) {
+        if (maxD <= 0) {
+            return 100;
+        }
+        
         // if l is empty then the distance to r is the length of r
         if (string.IsNullOrEmpty(l)) {
             return r.Length;
@@ -28,14 +32,18 @@ public class TypingController {
         // abc, def
         int[] rec = {
             // L(bc, def)
-            Levenshtein(l.Substring(1), r),
+            Levenshtein(l.Substring(1), r, maxD - 1),
             // L(abc, ef)
-            Levenshtein(l, r.Substring(1)),
+            Levenshtein(l, r.Substring(1), maxD - 1),
             // L(bc, ef)
-            Levenshtein(l.Substring(1), r.Substring(1))
+            Levenshtein(l.Substring(1), r.Substring(1), maxD - 1)
         };
 
         // add one as we made a change
         return 1 + rec.Min();
+    }
+    
+    public static int Levenshtein(string l, string r) {
+        Levenshtein(l, r, 7);
     }
 }
