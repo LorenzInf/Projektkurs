@@ -233,6 +233,7 @@ public class Fight : MonoBehaviour
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
+			(GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).DestroyWeapon();
             StatController.lastRunSuccessful = false;
 			PlayerController._health = PlayerController._maxHealth;
             StatController._tempRugh = 0;
