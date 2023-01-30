@@ -94,7 +94,8 @@ public class Fight : MonoBehaviour
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
     }
 
-    private void EndFight() {
+    private void EndFight(){
+        (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).DestroyWeapon();
         if(_isBossFight) {
             StatController.enemiesKilled++;
             LevelController.EndRun();
