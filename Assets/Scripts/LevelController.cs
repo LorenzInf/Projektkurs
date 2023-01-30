@@ -14,18 +14,18 @@ public class LevelController : MonoBehaviour{
 	public GameObject sideDoorClosedPrefab;
 	public GameObject ChestOpenPrefab;
 	public GameObject ChestClosedPrefab;
-	public GameObject enemy;
-	public GameObject boss;
 
 	private List<GameObject> currentRoom=new List<GameObject>();
-	private GameObject currentEnemy=null;
 	private int cx = -1,cy = -1;
 	private MapGen.Room[,] r = null;
 	private float scale;
 
-	void Start() {
+	void Start()
+	{
+		(player.GetComponent("PlayerController") as PlayerController).Reset();
 		scale=Camera.main.orthographicSize / 6;
-		int i = PlayerController.GetLevel() * 2 + 5;
+		Config.MakeAllAvailabel();
+		int i = StatController._level * 2 + 8;
 		SetUpLevel(i, i, i);
 		SetRoom();
 	}
@@ -57,8 +57,6 @@ public class LevelController : MonoBehaviour{
 	}
 
 	public bool CanMove(MapGen.Dir dir){
-		//if(currentEnemy!=null)
-		//	return false;
 		string s = r[cx,cy].ToString();
 		if(dir==MapGen.Dir.Up&&s.Contains("^")){
 			return true;
@@ -100,11 +98,11 @@ public class LevelController : MonoBehaviour{
 			open = r[cx,cy+1].Visited(false);
 			if(open){
 				go = Instantiate(doorOpenPrefab);
-				go.transform.position = new Vector3(0f,-4.88f,0f);
+				go.transform.position = new Vector3(0f,-4.88f,-6.0f);
 				currentRoom.Add(go);
 			}else{
 				go = Instantiate(doorClosedPrefab);
-				go.transform.position = new Vector3(0f,-4.88f,0f);
+				go.transform.position = new Vector3(0f,-4.88f,-6.0f);
 				currentRoom.Add(go);
 			}
 		}
@@ -148,12 +146,20 @@ public class LevelController : MonoBehaviour{
 		room.Visited(true);
 		if(s.Contains("Boss")&&!b){
 			Fight._isBossFight = true;
+			SetVisible(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
 		} else if(s.Contains("Enemy")&&!b){
 			Fight._isBossFight = false;
+			SetVisible(false);
 			things.SetActive(false);
 			SceneManager.LoadScene("Fight", LoadSceneMode.Additive);
+		}
+	}
+
+	public void SetVisible(bool viseble){
+		foreach (GameObject gameObject in currentRoom){
+			gameObject.SetActive(viseble);
 		}
 	}
 
@@ -161,12 +167,7 @@ public class LevelController : MonoBehaviour{
 		s=s.ToLower();
 		var w = (player.GetComponent("PlayerController") as PlayerController).GetWeapon(s);
 	    if (w != null) {
-			if(currentEnemy==null){
-				(player.GetComponent("PlayerController") as PlayerController).Attack(w,0);
-			}else{
-				Vector3 v = player.transform.position - currentEnemy.transform.position;
-				AttackEnemy((player.GetComponent("PlayerController") as PlayerController).Attack(w,v.magnitude));
-			}
+			//Print weapon stats?
 	    } else {
 		    if (s == "healingpotion"){
 			    (player.GetComponent("PlayerController") as PlayerController).UseItem(s, null);
@@ -196,32 +197,20 @@ public class LevelController : MonoBehaviour{
 		}
 	}
 
-	/////
-	public void AttackPlayer(double damage){
-		Debug.Log((player.GetComponent("PlayerController") as PlayerController).Lifes());
-		(player.GetComponent("PlayerController") as PlayerController).TakeDamage(damage);
-		if(!(player.GetComponent("PlayerController") as PlayerController).Lifes()){
-			EndFight();
-		}
+	public void EndFight(){
+		SetVisible(true);
+		StatController._tempRugh += 1;
+        PlayerController.MovementLocked(false);
+		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
 	}
 
-	public void AttackEnemy(double damage){
-		(currentEnemy.GetComponent("EnemyController") as EnemyController).TakeDamage(damage);
-		if(!(currentEnemy.GetComponent("EnemyController") as EnemyController).Lifes()){
-			EndFight();
-		}
-	}
-	/////
-
-	private void EndFight(){
-		if(r[cx,cy].ToString().Contains("Boss")){
-			PlayerController.AddRugh(PlayerController.GetLevel());
-			PlayerController.LevelUp();
-			SceneManager.LoadScene("Hub");
-		}else{
-			Destroy(currentEnemy);
-			currentEnemy = null;
-			PlayerController.AddRugh(PlayerController.GetLevel()/5);
-		}
+	public static void EndRun(){
+		StatController.lastRunSuccessful = true;
+		PlayerController._health = PlayerController._maxHealth;
+		(GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).things.SetActive(true);
+		StatController._level++;
+		StatController._tempRugh += (int) (5 + (StatController._level / 5));
+		PlayerController.MovementLocked(false);
+		SceneManager.LoadScene("ResultScreen");
 	}
 }

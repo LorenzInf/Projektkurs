@@ -7,17 +7,18 @@ using UnityEngine;
 public class MapGen{
 
 	 private static Coord last;
-     private int maxD;
-    
-
+     private static int maxD;
+     
      public static Room[,] Gen(int width, int height, int amountOfRooms) {
+            maxD = 0;
+
             var random = new System.Random();
             var map = new Room[width, height];
             
             var coords = new Coord(random.Next(0, width), random.Next(0, height));
             map[coords.X, coords.Y] = new Room(RoomType.Starting, new List<Dir>());
 		
-            FillRec(map, coords, amountOfRooms - 1, random);
+            FillRec(map, coords, amountOfRooms - 1, random, 0);
 
 			map[last.X, last.Y] = new Room(RoomType.Boss, map[last.X, last.Y].Dirs);
 
@@ -32,8 +33,8 @@ public class MapGen{
              return;
          }
             
-         //var amount = random.Next(paths.Count - 1) + 1; 
-         var amount = paths.Count;
+         var amount = random.Next(paths.Count - 1) + 1; 
+         //var amount = paths.Count;
          var nDistribution = Distribute(amountOfRooms, amount, random);
          
          
@@ -54,6 +55,8 @@ public class MapGen{
      private static RoomType GetRandomRoom(System.Random r) { 
     	 var rooms = new List<RoomType>{
         	RoomType.Enemy,
+            RoomType.Enemy,
+            RoomType.Enemy,
         	RoomType.Loot,
         	RoomType.Empty
          };

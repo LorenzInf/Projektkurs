@@ -7,10 +7,8 @@ public class PlayerController : MonoBehaviour{
 
 	private static List<Config.Item> _items=new List<Config.Item>();
 	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
-    private static double _maxHealth=100;
+    public static double _maxHealth=100;
     public static double _health=100;
-    private static double _level=1;
-    private static int _rugh = 0;
     private static bool _movementLocked = false;
     
     private bool left=false;
@@ -25,7 +23,7 @@ public class PlayerController : MonoBehaviour{
 
 	public void Start(){
 		scale=Camera.main.orthographicSize / 6;
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
+		//AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 	}
 
     public void Update(){
@@ -46,18 +44,13 @@ public class PlayerController : MonoBehaviour{
 			    x += 6 * scale;
 		    if (left == x > 0 && x != 0.0f) {
 			    gameObject.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
-			    if (current != null)
-				    current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
 			    left = !left;
 		    }
-
 		    gameObject.transform.position += new Vector3(x, y, 0.0f) * Time.deltaTime;
 		    MapGen.Dir dir = MovedToDoor();
 		    if (dir != MapGen.Dir.Null)
 			    level.Move(dir);
 		    ValidatePosition();
-		    if (current != null)
-			    current.transform.position = gameObject.transform.position;
 	    }
     }
 
@@ -109,10 +102,11 @@ public class PlayerController : MonoBehaviour{
 	}
 
 	public void Reset(){
-		_items=new List<Config.Item>();
-		_weapons = new Dictionary<string,WeaponController>();
-		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Baseballbat));
+		_items.Clear();
+		_weapons.Clear();
+		AddWeapon(WeaponController.CreateWeapon(Config.Weapon.Bat));
 		Heal();
+		_movementLocked = false;
 	}
 
 	public double Attack(WeaponController w,double dist) {
@@ -140,7 +134,7 @@ public class PlayerController : MonoBehaviour{
     }
     
     public void AddWeapon(WeaponController w){
-	    if (w != null) {
+	    if (w != null){
 		    if (GetWeapon(w.GetName()) != null) {
 			    _weapons.Remove(w.GetName());
 		    }
@@ -157,33 +151,32 @@ public class PlayerController : MonoBehaviour{
 	    }
     }
 
-    public static int GetLevel() {
-        return (int)(_level);
-    }
-
-    public static void LevelUp(){
-	    _level++;
-    }
-
-    public static void AddRugh(int amount) {
-	    _rugh += amount;
-    }
-
-    public static int GetRugh(){
-	    return _rugh;
-    }
     public void UseItem(string item,WeaponController wc){
 	    switch (item) {
 		    case "healingpotion":
-			    _health = _maxHealth;
+			    if (_items.Remove(Config.Item.HealingPotion)){
+				    Heal();
+				    if (!_items.Contains(Config.Item.HealingPotion))
+					    (inventar.GetComponent("InventarController") as InventarController).Remove("healingpotion");
+			    }
 			    break;
 		    case "ammobox":
-			    if (wc!=null)
-				    wc.Refill();
+			    if (wc != null){
+				    if (_items.Remove(Config.Item.AmmoBox)) {
+					    wc.Refill();
+					    if (!_items.Contains(Config.Item.AmmoBox))
+						    (inventar.GetComponent("InventarController") as InventarController).Remove("ammobox");
+				    }
+			    }
 			    break;
 		    case "repairkit":
-			    if (wc!=null)
-				    wc.Repair();
+			    if (wc != null){
+				    if (_items.Remove(Config.Item.RepairKit)) {
+					    wc.Repair();
+					    if (!_items.Contains(Config.Item.RepairKit))
+						    (inventar.GetComponent("InventarController") as InventarController).Remove("repairkit");
+				    }
+			    }
 			    break;
 	    }
     }
@@ -194,9 +187,9 @@ public class PlayerController : MonoBehaviour{
 		    case "health":
 			    purchaseable = ((_maxHealth - 100) / 100) < 3;
 			    if (purchaseable)
-				    purchaseable = _rugh >= ((_health - 100) / 100) * 5;
+				    //purchaseable = StatController._rugh >= ((_health - 100) / 100) * 5; 	What are these
 			    if (purchase && purchaseable){
-				    _rugh -= (int)(((_maxHealth - 100) / 100) * 5);
+				    //StatController._rugh -= (int)(((_maxHealth - 100) / 100) * 5); 		for...?
 				    _maxHealth += 100;
 			    }
 			    break;
@@ -207,15 +200,18 @@ public class PlayerController : MonoBehaviour{
     public void SetLastWeapon(WeaponController w) {
 	    string type = w.GetType().ToString().ToLower();
 	    foreach (var weapon in weapons) {
-			Debug.Log(weapon.name.ToLower());
 		    if (weapon.name.ToLower() == type) {
 			    Destroy(current);
 			    current = Instantiate(weapon);
-				if(left)
-					current.transform.Rotate(0.0f, 180.0f, 0.0f, Space.Self);
+			    Debug.Log(current);
 		    }
 	    }
     }
+
+	public void DestroyWeapon(){
+		if(current!=null)
+			Destroy(current);
+	}
 
     public static double GetMaxHealth() {
 	    return _maxHealth;
