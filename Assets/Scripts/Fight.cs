@@ -54,7 +54,7 @@ public class Fight : MonoBehaviour
     
     void Start() {
         //Set Enemy stats
-        enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
+        enemyLevel = (int) (StatController._level * (_isBossFight ? 1 : 1.5));
         if(_isBossFight) {
 			bossRoom.SetActive(true);
             enemyHealth = 50 + enemyLevel * 4;
@@ -223,7 +223,7 @@ public class Fight : MonoBehaviour
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
 			PlayerController._health = PlayerController._maxHealth;
-            PlayerController._tempRugh = 0;
+            StatController._tempRugh = 0;
 			PlayerController.MovementLocked(false);
             SceneManager.LoadScene("Hub");
         }

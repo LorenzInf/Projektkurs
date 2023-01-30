@@ -9,9 +9,6 @@ public class PlayerController : MonoBehaviour{
 	private static Dictionary<string, WeaponController> _weapons = new Dictionary<string, WeaponController>();
     public static double _maxHealth=100;
     public static double _health=100;
-    public static double _level=1;
-    public static int _rugh = 0;
-	public static int _tempRugh = 0;
     private static bool _movementLocked = false;
     
     private bool left=false;
@@ -159,21 +156,6 @@ public class PlayerController : MonoBehaviour{
 	    }
     }
 
-    public static int GetLevel() {
-        return (int)(_level);
-    }
-
-    public static void LevelUp(){
-	    _level++;
-    }
-
-    public static void AddRugh(int amount) {
-	    _rugh += amount;
-    }
-
-    public static int GetRugh(){
-	    return _rugh;
-    }
     public void UseItem(string item,WeaponController wc){
 	    switch (item) {
 		    case "healingpotion":
@@ -210,9 +192,9 @@ public class PlayerController : MonoBehaviour{
 		    case "health":
 			    purchaseable = ((_maxHealth - 100) / 100) < 3;
 			    if (purchaseable)
-				    purchaseable = _rugh >= ((_health - 100) / 100) * 5;
+				    //purchaseable = StatController._rugh >= ((_health - 100) / 100) * 5; 	What are these
 			    if (purchase && purchaseable){
-				    _rugh -= (int)(((_maxHealth - 100) / 100) * 5);
+				    //StatController._rugh -= (int)(((_maxHealth - 100) / 100) * 5); 		for...?
 				    _maxHealth += 100;
 			    }
 			    break;
