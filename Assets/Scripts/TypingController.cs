@@ -44,6 +44,6 @@ public class TypingController {
     }
     
     public static int Levenshtein(string l, string r) {
-        Levenshtein(l, r, 7);
+        return Levenshtein(l, r, 7);
     }
 }
