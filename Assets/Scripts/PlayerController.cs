@@ -233,6 +233,11 @@ public class PlayerController : MonoBehaviour{
 	    }
     }
 
+	public void DestroyWeapon(){
+		if(current!=null)
+			Destroy(current);
+	}
+
     public static double GetMaxHealth() {
 	    return _maxHealth;
     }
