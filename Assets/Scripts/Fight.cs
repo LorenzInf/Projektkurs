@@ -118,11 +118,13 @@ public class Fight : MonoBehaviour
             currWord = allWords[(int) UnityEngine.Random.Range(0.0f, (float) allWords.Length)]; //Get a random word to type
             headerText.text = "<#BE271A>Get ready...";
             timer = 2f;
-        } else if (weaponField.text.Contains("define") || weaponField.text.Contains("definition") {
-	    if (currWord != null) {
-		Application.OpenURL($"https://www.oxfordlearnersdictionaries.com/definition/english/{currWord}");
-	    } else {
-		weaponField.text("No word to define yet");
+        } else if (weaponField.text.Contains("define") || weaponField.text.Contains("definition")) {
+	    	if (currWord != null) {
+				Application.OpenURL($"https://www.google.com/search?q=define+{currWord}");
+				weaponField.text = "";
+	    	} else {
+				weaponField.text = "No word to define yet";
+			}
 	} else {
             weaponField.text = "Couldn't find that weapon...";
         }
