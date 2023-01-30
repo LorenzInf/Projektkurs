@@ -8,8 +8,7 @@ public class MapGen{
 
 	 private static Coord last;
      private static int maxD;
-    
-
+     
      public static Room[,] Gen(int width, int height, int amountOfRooms) {
             maxD = 0;
 
@@ -35,7 +34,7 @@ public class MapGen{
          }
             
          var amount = random.Next(paths.Count - 1) + 1; 
-         var amount = paths.Count;
+         //var amount = paths.Count;
          var nDistribution = Distribute(amountOfRooms, amount, random);
          
          
