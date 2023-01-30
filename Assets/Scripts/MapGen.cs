@@ -34,7 +34,7 @@ public class MapGen{
              return;
          }
             
-         //var amount = random.Next(paths.Count - 1) + 1; 
+         var amount = random.Next(paths.Count - 1) + 1; 
          var amount = paths.Count;
          var nDistribution = Distribute(amountOfRooms, amount, random);
          

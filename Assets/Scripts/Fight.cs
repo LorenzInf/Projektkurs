@@ -17,7 +17,7 @@ public class Fight : MonoBehaviour
     private bool postAttack;
     private int fightTextOpacity = 99;
     private string[] allWords;
-    private string currWord;
+    private static string currWord;
     private char[] currWordArr;
     private string currDisplayedWord;
     private char[] currDisplayedWordArr;
@@ -54,7 +54,7 @@ public class Fight : MonoBehaviour
     
     void Start() {
         //Set Enemy stats
-        enemyLevel = (int) (PlayerController.GetLevel() * (_isBossFight ? 1 : 1.5));
+        enemyLevel = (int) (StatController._level * (_isBossFight ? 1 : 1.5));
         if(_isBossFight) {
 			bossRoom.SetActive(true);
             enemyHealth = 50 + enemyLevel * 4;
@@ -97,8 +97,10 @@ public class Fight : MonoBehaviour
     private void EndFight(){
         (GameObject.Find("Player").GetComponent("PlayerController") as PlayerController).DestroyWeapon();
         if(_isBossFight) {
+            StatController.enemiesKilled++;
             LevelController.EndRun();
         } else {
+            StatController.enemiesKilled++;
             (GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).EndFight();
             SceneManager.UnloadSceneAsync("Fight");
         }
@@ -118,8 +120,15 @@ public class Fight : MonoBehaviour
             currWord = allWords[(int) UnityEngine.Random.Range(0.0f, (float) allWords.Length)]; //Get a random word to type
             headerText.text = "<#BE271A>Get ready...";
             timer = 2f;
-        } else {
-            weaponField.text = "Couldn't find that weapon...";
+        } else if (weaponField.text.Contains("define") || weaponField.text.Contains("definition")) {
+	    	if (currWord != null) {
+				Application.OpenURL($"https://www.google.com/search?q=define+{currWord}");
+				weaponField.text = "";
+	    	} else {
+				weaponField.text = "No word to define yet";
+			}
+	} else {
+            weaponField.text = "You don't have that weapon";
         }
     }
 
@@ -161,8 +170,8 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use());
                     attackSuccess = 3;
                 } else if (timerBar.fillAmount > 0.25) {
-                    headerText.text = "<#F8E153>Okay";
-                    enemyHealth -= (int) (currWeapon.Use());
+                    headerText.text = "<#F8E153>Okay / -10% Damage";
+                    enemyHealth -= (int) (currWeapon.Use() * 0.9);
                     attackSuccess = 2;
                 } else {
                     headerText.text = "<#F86353>Barely.. / -25% Damage";
@@ -179,19 +188,12 @@ public class Fight : MonoBehaviour
                     enemyHealth -= (int) (currWeapon.Use() * 0.75);
                     attackSuccess = 1;
                 } else {
-                    headerText.text = "<#F86353>Barely.. / -25% Damage";
-                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
-                    attackSuccess = 1;
-                }
-            } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
-                if (timerBar.fillAmount > 0.5) {
-                    headerText.text = "<#F86353>Barely.. / -25% Damage";
-                    enemyHealth -= (int) (currWeapon.Use() * 0.75);
-                    attackSuccess = 1;
-                } else {
                     headerText.text = "<#CD2626>Miss...";
                     attackSuccess = 0;
                 }
+            } else if ((float) levenshteinDist / (float) currWord.Length < 0.75f) {
+                headerText.text = "<#CD2626>Miss...";
+                attackSuccess = 0;
             } else {
                 headerText.text = "<#CD2626>Miss...";
                 attackSuccess = 0;
@@ -199,6 +201,7 @@ public class Fight : MonoBehaviour
 		if (enemyHealth < 0) enemyHealth = 0;
         healthBarEnemy.fillAmount = (float) enemyHealth / enemyMaxHealth;
 		enemyHealthNr.text = ((int) enemyHealth).ToString();
+        StatController.wordsTyped++;
     }
 
     private void EnemyAttack(){
@@ -230,10 +233,11 @@ public class Fight : MonoBehaviour
 		playerHealthNr.text = ((int) PlayerController.GetHealth()).ToString();
         //TODO Enemy attack animation?
         if(PlayerController.GetHealth() <= 0) {
+            StatController.lastRunSuccessful = false;
 			PlayerController._health = PlayerController._maxHealth;
-            PlayerController._tempRugh = 0;
+            StatController._tempRugh = 0;
 			PlayerController.MovementLocked(false);
-            SceneManager.LoadScene("Hub");
+            SceneManager.LoadScene("ResultScreen");
         }
     }
 
@@ -300,9 +304,10 @@ public class Fight : MonoBehaviour
                         //If the letter that was just input is was correct
                         if(c.Equals(currWordArr[letterCount])) {
                             newDisplayedWord += c;
-                        } else {
+                        } else { //If it was incorrect
                             newDisplayedWord += $"<#EF1D0B>{c}<#1DF61B>";
                             errors++;
+                            StatController.typos++;
                         }
                         letterCount++;
                         newDisplayedWord += "<#FFFFFF>";
@@ -334,5 +339,5 @@ public class Fight : MonoBehaviour
             weaponFieldEmpty.SetActive(true);
             weaponField.ActivateInputField();
         }
-	}
+    }
 }

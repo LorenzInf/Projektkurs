@@ -37,7 +37,7 @@ public class Shop : MonoBehaviour
         possible.Add("Back", backText);
         possible.Add("Health", healthText);
 
-        rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+        rughBalance.SetText($"{StatController._rugh} R$");
 		ownedHealthUps = (((int) PlayerController.GetMaxHealth() - 100) / 100);
 
 		if (ownedHealthUps > 0) {
@@ -120,9 +120,9 @@ public class Shop : MonoBehaviour
                 } else {
                     if (el.Key.Equals("Upgrade")) {
                         if (ownedHealthUps == 0) {
-                            if (PlayerController.GetRugh() >= 10) {
-                                PlayerController.AddRugh(-10);
-                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                            if (StatController._rugh >= 10) {
+                                StatController._rugh -= 10;
+                                rughBalance.SetText($"{StatController._rugh} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 200;
                                 upgrade1.SetText("<#808080>Upgrade");
@@ -133,9 +133,9 @@ public class Shop : MonoBehaviour
                                 hundredHealth1.SetText("Insufficient Balance");
                             }
                         } else if (ownedHealthUps == 1) {
-                            if (PlayerController.GetRugh() >= 20) {
-                                PlayerController.AddRugh(-20);
-                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                            if (StatController._rugh >= 20) {
+                                StatController._rugh -= 20;
+                                rughBalance.SetText($"{StatController._rugh} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 300;
                                 upgrade2.SetText("<#808080>Upgrade");
@@ -146,9 +146,9 @@ public class Shop : MonoBehaviour
                                 hundredHealth2.SetText("Insufficient Balance");
                             }
                         } else if (ownedHealthUps == 2) {
-                            if (PlayerController.GetRugh() >= 30) {
-                                PlayerController.AddRugh(-30);
-                                rughBalance.SetText($"{PlayerController.GetRugh()} R$");
+                            if (StatController._rugh >= 30) {
+                                StatController._rugh -= 30;
+                                rughBalance.SetText($"{StatController._rugh} R$");
                                 PlayerController.Purchasable("health",true);
 								PlayerController._health = 400;
                                 upgrade2.SetText("<#808080>Upgrade");
