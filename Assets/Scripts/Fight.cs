@@ -96,7 +96,6 @@ public class Fight : MonoBehaviour
 
     private void EndFight() {
         if(_isBossFight) {
-	    currWord = null;
             LevelController.EndRun();
         } else {
             (GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).EndFight();
@@ -126,7 +125,7 @@ public class Fight : MonoBehaviour
 				weaponField.text = "No word to define yet";
 			}
 	} else {
-            weaponField.text = "Couldn't find that weapon...";
+            weaponField.text = "You don't have that weapon";
         }
     }
 
