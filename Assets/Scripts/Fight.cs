@@ -17,7 +17,7 @@ public class Fight : MonoBehaviour
     private bool postAttack;
     private int fightTextOpacity = 99;
     private string[] allWords;
-    private string currWord;
+    private static string currWord;
     private char[] currWordArr;
     private string currDisplayedWord;
     private char[] currDisplayedWordArr;
@@ -96,6 +96,7 @@ public class Fight : MonoBehaviour
 
     private void EndFight() {
         if(_isBossFight) {
+	    currWord = null;
             LevelController.EndRun();
         } else {
             (GameObject.Find("Main Camera").GetComponent("LevelController") as LevelController).EndFight();
@@ -117,7 +118,12 @@ public class Fight : MonoBehaviour
             currWord = allWords[(int) UnityEngine.Random.Range(0.0f, (float) allWords.Length)]; //Get a random word to type
             headerText.text = "<#BE271A>Get ready...";
             timer = 2f;
-        } else {
+        } else if (weaponField.text.Contains("define") || weaponField.text.Contains("definition") {
+	    if (currWord != null) {
+		Application.OpenURL($"https://www.oxfordlearnersdictionaries.com/definition/english/{currWord}");
+	    } else {
+		weaponField.text("No word to define yet");
+	} else {
             weaponField.text = "Couldn't find that weapon...";
         }
     }
@@ -326,5 +332,5 @@ public class Fight : MonoBehaviour
             weaponFieldEmpty.SetActive(true);
             weaponField.ActivateInputField();
         }
-	}
+    }
 }
